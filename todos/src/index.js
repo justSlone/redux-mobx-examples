@@ -1,15 +1,14 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
+import { Provider } from 'mobx-react'
 import App from './components/App'
-import rootReducer from './reducers'
-
-const store = createStore(rootReducer)
+import {todoStore, optionsStore} from './stores'
+import { configure } from 'mobx';
+configure({enforceActions: "always"});
 
 render(
-  <Provider store={store}>
-    <App />
+  <Provider todoStore={todoStore} optionsStore={optionsStore}>      
+    <App />    
   </Provider>,
   document.getElementById('root')
 )

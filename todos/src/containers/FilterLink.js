@@ -1,16 +1,14 @@
-import { connect } from 'react-redux'
-import { setVisibilityFilter } from '../actions'
-import Link from '../components/Link'
+import React from "react";
+import Link from "../components/Link";
+import { observer, inject } from "mobx-react";
 
-const mapStateToProps = (state, ownProps) => ({
-  active: ownProps.filter === state.visibilityFilter
-})
+const mapStoreToProps = (store, ownProps) => ({
+  active: ownProps.filter === store.state.visibilityFilter,
+  onClick: () => store.setVisibilityFilter(ownProps.filter)
+});
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onClick: () => dispatch(setVisibilityFilter(ownProps.filter))
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Link)
+export default inject("optionsStore")(
+  observer(({ optionsStore, ...props }) => (
+    <Link {...mapStoreToProps(optionsStore, props)} {...props} />
+  ))
+);
