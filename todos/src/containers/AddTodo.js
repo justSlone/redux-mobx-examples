@@ -1,10 +1,8 @@
 import React from 'react'
 import { inject } from 'mobx-react'
-import { addTodoCreator } from '../stores/TodoStore'
 
-const AddTodo = inject('todoStore')(({ todoStore }) => {
+const AddTodo = inject('store')(({ store }) => {
   let input
-  let addTodo = addTodoCreator(todoStore);
   return (
     <div>
       <form onSubmit={e => {
@@ -12,7 +10,7 @@ const AddTodo = inject('todoStore')(({ todoStore }) => {
         if (!input.value.trim()) {
           return
         }        
-        addTodo(input.value);        
+        store.actions.addTodo(input.value);        
         input.value = ''
       }}>
         <input ref={node => input = node} />

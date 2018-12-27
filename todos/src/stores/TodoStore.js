@@ -1,61 +1,43 @@
-import { observable, computed, action, decorate} from 'mobx'
+import { observable, computed, action, decorate } from "mobx";
 
-// export class Todo {
-//     constructor({ id, text, completed }) {
-//         this.id = id;
-//         this.text = text;
-//         this.completed = completed;
-//     }
-// }
+export class TodoStore {
+  constructor() {
+    this._state = [];
+  }
+  _state;
 
-export const addTodoCreator = (state) => {
-    let nextTodoId = 0
-    return (text) => {
-        state.addTodo({
-            id: nextTodoId++,
-            text,            
-            completed: false
-        });
-    }
-};
+  get completedTodosCount() {
+    return this._state.filter(todo => todo.completed).length;
+  }
 
-export class TodoStore {    
-    state = observable([]);
+  getState = ()=> {
+    return this._state;
+  }
 
-    get completedTodosCount() {
-        return this.todos.filter(todo => todo.completed).length
-    }    
+  addTodo = ({ id, text }) => {
+    this._state.push({
+      id,
+      text,
+      completed: false
+    });
+  };
 
-    /*private*/ nextTodoId = 0;      
-    // not a pure function
-    addTodoImpure(text) {
-        this.state.push({
-            id:  this.nextTodoId++,
-            text,            
-            completed: false
-        });
-    }
+  removeTodo = id => (
+    this._state = this._state.filter(todo => todo.id !== id)
+  )
 
-
-    addTodo({id, text, completed = false}) {
-        this.state.push({
-            id,
-            text,            
-            completed
-        });
-    }
-
-    toggleTodo(id){        
-        this.state.forEach((todo)=>{
-            if(todo.id === id){
-                todo.completed = !todo.completed;
-            }
-        });        
-    }
+  toggleTodo = id => (
+    this._state.forEach(todo => {
+      if (todo.id === id) {
+        todo.completed = !todo.completed;
+      }
+    })
+  )
 }
 decorate(TodoStore, {
-    todos: observable,    
-    completedTodosCount: computed,
-    addTodo: action,
-    toggleTodo: action
-  });
+  _state: observable,
+  completedTodosCount: computed,
+  addTodo: action,
+  toggleTodo: action,
+  removeTodo: action,  
+});

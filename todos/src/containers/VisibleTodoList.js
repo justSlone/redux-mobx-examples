@@ -1,9 +1,7 @@
 import React from "react";
 import TodoList from "../components/TodoList";
-import { observer } from "mobx-react";
-import { VisibilityFilters } from "../stores/OptionsStore";
-import { todoStore, optionsStore } from "../stores";
-
+import { observer, inject } from "mobx-react";
+import { VisibilityFilters } from "../stores/FilterStore";
 
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
@@ -18,9 +16,20 @@ const getVisibleTodos = (todos, filter) => {
   }
 };
 
-const mapStoreToProps = store => ({
-  todos: getVisibleTodos(store.state, optionsStore.state.visibilityFilter),
-  toggleTodo: id => store.toggleTodo(id)
+const mapStateToProps = state => ({
+  todos: getVisibleTodos(state.todos, state.visibilityFilter)
 });
 
-export default observer(() => <TodoList {...mapStoreToProps(todoStore)} />);
+const mapActionsToProps = actions => ({
+  toggleTodo: id => actions.toggleTodo(id),
+  removeTodo: id => actions.removeTodo(id)
+});
+
+export default inject("store")(
+  observer(({store}) => (
+    <TodoList
+      {...mapStateToProps(store.state)}
+      {...mapActionsToProps(store.actions)}
+    />
+  ))
+);

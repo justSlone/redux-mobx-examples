@@ -1,18 +1,19 @@
-import {TodoStore, addTodoCreator} from "./TodoStore";
+import {TodoStore} from "./TodoStore";
+import {toJS} from 'mobx';
 var todoStore = new TodoStore();
-let addTodo = addTodoCreator(todoStore);
+
 
 describe("todo store", () => {
   it("should handle initial state", () => {
-    expect(todoStore.state).toEqual([]);
+    expect(toJS(todoStore.getState())).toEqual([]);
   });
-
+  
   it("should handle ADD_TODO", () => {
     todoStore.addTodo({
       text: "Run the tests",
       id: 0
     });
-    expect(todoStore.state).toEqual([
+    expect(toJS(todoStore.getState())).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -24,7 +25,7 @@ describe("todo store", () => {
       text: "Use Mobx",
       id: 1
     });
-    expect(todoStore.state).toEqual([
+    expect(toJS(todoStore.getState())).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -42,7 +43,7 @@ describe("todo store", () => {
       id: 2
     });
 
-    expect(todoStore.state).toEqual([
+    expect(toJS(todoStore.getState())).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -64,7 +65,7 @@ describe("todo store", () => {
   it("should handle TOGGLE_TODO", () => {
     todoStore.toggleTodo(1);
 
-    expect(todoStore.state).toEqual([
+    expect(toJS(todoStore.getState())).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -74,6 +75,28 @@ describe("todo store", () => {
         text: "Use Mobx",
         completed: true,
         id: 1
+      },
+      {
+        text: "Fix the tests",
+        completed: false,
+        id: 2
+      }
+    ]);
+  });
+
+  it("should handle completedTodosCount", () => {
+    expect(toJS(todoStore.completedTodosCount)).toEqual(1);
+  });
+
+
+  it("should handle REMOVE_TODO", () => {
+    todoStore.removeTodo(1);
+
+    expect(toJS(todoStore.getState())).toEqual([
+      {
+        text: "Run the tests",
+        completed: false,
+        id: 0
       },
       {
         text: "Fix the tests",
