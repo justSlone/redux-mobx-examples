@@ -1,7 +1,6 @@
 import { TodoStore } from "./TodoStore";
 import { FilterStore, VisibilityFilters } from "./FilterStore";
 
-
 export class Store {
   constructor(){
     this._todoStore = new TodoStore();
@@ -10,6 +9,7 @@ export class Store {
   _todoStore
   _filterStore
   
+  //TODO: build this based on a protoype object
   get state() {
     let _this = this;
     return {
