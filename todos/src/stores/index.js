@@ -1,36 +1,43 @@
 import { TodoStore } from "./TodoStore";
 import { FilterStore, VisibilityFilters } from "./FilterStore";
-import { observable, computed, action, decorate } from "mobx";
 
-const todoStore = new TodoStore();
-const filterStore = new FilterStore();
 
-let nextTodoId = 0;
-
-export class Store { 
-
-  state = {    
-    get visibilityFilter() {
-      return filterStore._state
-    },
-    get todos() {
-      return todoStore._state
-    },
-    get completedTodosCount() {
-      return todoStore.completedTodosCount 
-    }  
+export class Store {
+  constructor(){
+    this._todoStore = new TodoStore();
+    this._filterStore = new FilterStore();    
+  }
+  _todoStore
+  _filterStore
+  
+  get state() {
+    let _this = this;
+    return {
+      get visibilityFilter() {
+        return _this._filterStore.state.visibilityFilter;
+      },
+      get todos() {
+        return _this._todoStore.state.todos;
+      },
+      get completedTodosCount() {
+        return _this._todoStore.state.completedTodosCount;
+      }
+    };       
   }
 
-  actions = {
-    addTodo: text =>
-      todoStore.addTodo({
-        id: nextTodoId++,
-        text
-      }),
-    toggleTodo: todoStore.toggleTodo,
-    removeTodo: todoStore.removeTodo,
-    setVisibilityFilter: filterStore.setVisibilityFilter
-  }
-};
+  _nextTodoId = 0;
+  get actions() {    
+    return {
+      addTodo: text =>
+      this._todoStore.actions.addTodo({
+          id: this._nextTodoId++,
+          text
+        }),
+      toggleTodo: this._todoStore.actions.toggleTodo,
+      removeTodo: this._todoStore.actions.removeTodo,
+      setVisibilityFilter: this._filterStore.actions.setVisibilityFilter
+    }
+  };
+}
 
-export { VisibilityFilters }
+export { VisibilityFilters };

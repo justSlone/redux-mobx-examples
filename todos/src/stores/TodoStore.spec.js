@@ -2,18 +2,19 @@ import {TodoStore} from "./TodoStore";
 import {toJS} from 'mobx';
 var todoStore = new TodoStore();
 
+const {state, actions} = todoStore;
 
 describe("todo store", () => {
   it("should handle initial state", () => {
-    expect(toJS(todoStore.getState())).toEqual([]);
+    expect(toJS(state.todos)).toEqual([]);
   });
   
   it("should handle ADD_TODO", () => {
-    todoStore.addTodo({
+    actions.addTodo({
       text: "Run the tests",
       id: 0
     });
-    expect(toJS(todoStore.getState())).toEqual([
+    expect(toJS(state.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -21,11 +22,11 @@ describe("todo store", () => {
       }
     ]);
 
-    todoStore.addTodo({
+    actions.addTodo({
       text: "Use Mobx",
       id: 1
     });
-    expect(toJS(todoStore.getState())).toEqual([
+    expect(toJS(state.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -38,12 +39,12 @@ describe("todo store", () => {
       }
     ]);
 
-    todoStore.addTodo({
+    actions.addTodo({
       text: "Fix the tests",
       id: 2
     });
 
-    expect(toJS(todoStore.getState())).toEqual([
+    expect(toJS(state.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -63,9 +64,9 @@ describe("todo store", () => {
   });
 
   it("should handle TOGGLE_TODO", () => {
-    todoStore.toggleTodo(1);
+    actions.toggleTodo(1);
 
-    expect(toJS(todoStore.getState())).toEqual([
+    expect(toJS(state.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -85,14 +86,14 @@ describe("todo store", () => {
   });
 
   it("should handle completedTodosCount", () => {
-    expect(toJS(todoStore.completedTodosCount)).toEqual(1);
+    expect(toJS(state.completedTodosCount)).toEqual(1);
   });
 
 
   it("should handle REMOVE_TODO", () => {
-    todoStore.removeTodo(1);
+    actions.removeTodo(1);
 
-    expect(toJS(todoStore.getState())).toEqual([
+    expect(toJS(state.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,

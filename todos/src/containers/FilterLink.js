@@ -2,12 +2,9 @@ import React from "react";
 import Link from "../components/Link";
 import { observer, inject } from "mobx-react";
 
-const mapStateToProps = (state, ownProps) => {
-  console.log(state.visibilityFilter);
-  return {
-    active: ownProps.filter === state.visibilityFilter
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  active: ownProps.filter === state.visibilityFilter
+});
 
 const mapActionsToProps = (actions, ownProps) => ({
   onClick: () => actions.setVisibilityFilter(ownProps.filter)

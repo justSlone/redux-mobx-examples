@@ -1,43 +1,47 @@
-import { observable, computed, action, decorate } from "mobx";
+import { computed, action, decorate, extendObservable} from "mobx";
 
 export class TodoStore {
-  constructor() {
-    this._state = [];
-  }
-  _state;
+  constructor() {    
+    extendObservable(this, { _state: [] });
+  }  
 
-  get completedTodosCount() {
-    return this._state.filter(todo => todo.completed).length;
-  }
-
-  getState = ()=> {
-    return this._state;
-  }
-
-  addTodo = ({ id, text }) => {
-    this._state.push({
-      id,
-      text,
-      completed: false
-    });
-  };
-
-  removeTodo = id => (
-    this._state = this._state.filter(todo => todo.id !== id)
-  )
-
-  toggleTodo = id => (
-    this._state.forEach(todo => {
-      if (todo.id === id) {
-        todo.completed = !todo.completed;
+  get state() {
+    let _this = this;
+    return decorate({
+      get todos() {
+        return _this._state;
+      },
+      get completedTodosCount() {
+        return _this._state.filter(todo => todo.completed).length;
       }
-    })
-  )
+    },
+    {            
+      completedTodosCount: computed
+    });
+  }
+
+  get actions() {
+    return decorate(
+      {
+        addTodo: ({ id, text }) =>
+          this._state.push({
+            id,
+            text,
+            completed: false
+          }),
+        removeTodo: id =>
+          (this._state = this._state.filter(todo => todo.id !== id)),
+        toggleTodo: id =>
+          this._state.forEach(todo => {
+            if (todo.id === id) {
+              todo.completed = !todo.completed;
+            }
+          })
+      },
+      { addTodo: action, removeTodo: action, toggleTodo: action }
+    );
+  }
 }
-decorate(TodoStore, {
-  _state: observable,
-  completedTodosCount: computed,
-  addTodo: action,
-  toggleTodo: action,
-  removeTodo: action,  
-});
+// decorate(TodoStore, {
+//   _state: observable,
+// });

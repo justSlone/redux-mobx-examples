@@ -1,26 +1,36 @@
-import { observable, action, decorate, computed } from 'mobx'
+import { action, decorate, extendObservable } from "mobx";
 
 export const VisibilityFilters = {
-    SHOW_ALL: 'SHOW_ALL',
-    SHOW_COMPLETED: 'SHOW_COMPLETED',
-    SHOW_ACTIVE: 'SHOW_ACTIVE'
+  SHOW_ALL: "SHOW_ALL",
+  SHOW_COMPLETED: "SHOW_COMPLETED",
+  SHOW_ACTIVE: "SHOW_ACTIVE"
+};
+
+export class FilterStore {
+  constructor() {    
+    extendObservable(this, { _state: VisibilityFilters.SHOW_ALL });
   }
-  
-export class FilterStore { 
-    constructor() {
-        this._state = VisibilityFilters.SHOW_ALL;
-    }   
-    _state
 
-    getState = () => {
-        return this._state;
-    }
+  get state() {
+    let _this = this;
+    return {
+    get visibilityFilter() {
+        return _this._state;
+      },
+    };
+  }
 
-    setVisibilityFilter = (filter) => {
-        this._state = filter;        
-    }
+  get actions() {
+    return decorate(
+      {
+        setVisibilityFilter: filter => {
+          this._state = filter;
+        }
+      },
+      { setVisibilityFilter: action }
+    );
+  }
 }
-decorate(FilterStore, {
-    _state: observable,        
-    setVisibilityFilter: action,    
-  });
+// decorate(FilterStore, {
+//   _state: observable
+// });
