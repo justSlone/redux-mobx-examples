@@ -6,6 +6,9 @@
     "react-scripts": "^2.0.2"
   },
   "dependencies": {
+    "mobx": "^5.8.0",
+    "mobx-react": "^5.4.3",
+    "mobx-react-devtools": "^6.0.3",
     "prop-types": "^15.6.1",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",

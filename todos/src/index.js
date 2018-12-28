@@ -1,15 +1,14 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
+import { Provider } from 'mobx-react'
 import App from './components/App'
-import rootReducer from './reducers'
-
-const store = createStore(rootReducer)
+import {Store} from './stores'
+import { configure } from 'mobx';
+configure({enforceActions: "always"});
 
 render(
-  <Provider store={store}>
-    <App />
+  <Provider store={new Store()}>
+    <App />    
   </Provider>,
   document.getElementById('root')
 )
