@@ -10,7 +10,7 @@ const AddTodo = inject('store')(({ store }) => {
         if (!input.value.trim()) {
           return
         }        
-        store.actions.addTodo(input.value);        
+        store.addTodo(input.value);        
         input.value = ''
       }}>
         <input ref={node => input = node} />

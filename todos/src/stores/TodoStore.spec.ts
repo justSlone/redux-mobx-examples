@@ -2,19 +2,18 @@ import {TodoStore} from "./TodoStore";
 import {toJS} from 'mobx';
 var todoStore = new TodoStore();
 
-const {state, actions} = todoStore;
 
 describe("todo store", () => {
-  it("should handle initial state", () => {
-    expect(toJS(state.todos)).toEqual([]);
+  it("should handle initial todoStore", () => {
+    expect(toJS(todoStore.todos)).toEqual([]);
   });
   
   it("should handle ADD_TODO", () => {
-    actions.addTodo({
+    todoStore.addTodo({
       text: "Run the tests",
       id: 0
     });
-    expect(toJS(state.todos)).toEqual([
+    expect(toJS(todoStore.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -22,11 +21,11 @@ describe("todo store", () => {
       }
     ]);
 
-    actions.addTodo({
+    todoStore.addTodo({
       text: "Use Mobx",
       id: 1
     });
-    expect(toJS(state.todos)).toEqual([
+    expect(toJS(todoStore.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -39,12 +38,12 @@ describe("todo store", () => {
       }
     ]);
 
-    actions.addTodo({
+    todoStore.addTodo({
       text: "Fix the tests",
       id: 2
     });
 
-    expect(toJS(state.todos)).toEqual([
+    expect(toJS(todoStore.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -64,9 +63,9 @@ describe("todo store", () => {
   });
 
   it("should handle TOGGLE_TODO", () => {
-    actions.toggleTodo(1);
+    todoStore.toggleTodo(1);
 
-    expect(toJS(state.todos)).toEqual([
+    expect(toJS(todoStore.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -86,14 +85,14 @@ describe("todo store", () => {
   });
 
   it("should handle completedTodosCount", () => {
-    expect(toJS(state.completedTodosCount)).toEqual(1);
+    expect(toJS(todoStore.completedTodosCount)).toEqual(1);
   });
 
 
   it("should handle REMOVE_TODO", () => {
-    actions.removeTodo(1);
+    todoStore.removeTodo(1);
 
-    expect(toJS(state.todos)).toEqual([
+    expect(toJS(todoStore.todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,

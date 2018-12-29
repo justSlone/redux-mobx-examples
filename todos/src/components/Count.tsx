@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Count = ({ count }) => (
+const Count = ({ count }: {count: number}) => (
     <span>{count}</span>
 )
 
