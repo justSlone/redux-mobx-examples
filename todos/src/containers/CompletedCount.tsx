@@ -1,8 +1,9 @@
 import React from "react";
 import Count from "../components/Count";
 import { observer, inject } from "mobx-react";
+import {Store} from '../stores'
 
-const mapStoreToProps = store => ({
+const mapStoreToProps = (store: Store) => ({
   count: store.completedTodosCount
 });
 

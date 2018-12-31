@@ -2,12 +2,12 @@ import React from 'react'
 import { inject } from 'mobx-react'
 
 const AddTodo = inject('store')(({ store }) => {
-  let input
+  let input: HTMLInputElement | null
   return (
     <div>
       <form onSubmit={e => {
         e.preventDefault()
-        if (!input.value.trim()) {
+        if (!input || !input.value.trim()) {
           return
         }        
         store.addTodo(input.value);        

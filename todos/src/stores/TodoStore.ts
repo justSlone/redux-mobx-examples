@@ -1,29 +1,34 @@
-import { computed, action, observable } from "mobx";
+import { computed, action, observable, ObservableMap } from "mobx";
+import { createObservableArray, IObservableArray, observe } from "mobx/lib/internal";
 
-export interface Todo {
+export interface TodoItem {
   id: number;
   text: string;
-  completed: boolean;
+  completed?: boolean;
 }
 
-export class TodoStore {  
+class TodoStoreState{
   @observable
-  private state: Array<Todo> = new Array<Todo>();  
-  
-  /* State */
-  get todos() {
-    return this.state;
-  }
+  todos: IObservableArray<TodoItem> = observable([]);
+}
 
+export class TodoStore {    
+  private state = new TodoStoreState();
+  
+  /* State */    
+  get todos() {
+    return this.state.todos;
+  }
+  
   @computed
-  get completedTodosCount() {
-    return this.state.filter(todo => todo.completed).length;
+  get completedTodosCount() {    
+    return this.state.todos.filter(todo => todo.completed).length;
   }
 
   /* Actions */
   @action
-  addTodo = ({ id, text }) => {
-    this.state.push({
+  addTodo = ({ id, text }: TodoItem) => { //TODO: this binding is ugly
+    this.state.todos.push({
       id,
       text,
       completed: false
@@ -31,13 +36,13 @@ export class TodoStore {
   };
 
   @action
-  removeTodo = id => {
-    this.state = this.state.filter(todo => todo.id !== id);
+  removeTodo = (id: number) => {
+    this.state.todos.replace(this.state.todos.filter(todo => todo.id !== id));
   };
 
   @action
-  toggleTodo = id => {
-    this.state.forEach(todo => {
+  toggleTodo = (id: number) => {
+    this.state.todos.forEach(todo => {
       if (todo.id === id) {
         todo.completed = !todo.completed;
       }

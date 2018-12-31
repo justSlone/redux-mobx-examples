@@ -1,7 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-const Todo = ({ onClick, onRemoveClick, completed, text }) => (
+export interface TodoProps {
+  onClick: ()=> void
+  onRemoveClick: ()=>void
+  completed?: boolean
+  text: string
+}
+
+const Todo: React.SFC<TodoProps> = ({ onClick, onRemoveClick, completed, text }) => (
   <li
     onClick={onClick}
     style={{
@@ -11,11 +17,5 @@ const Todo = ({ onClick, onRemoveClick, completed, text }) => (
     {text} <span onClick={onRemoveClick} style={{color: 'red'}}>x</span>
   </li>
 )
-
-Todo.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  completed: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired
-}
 
 export default Todo

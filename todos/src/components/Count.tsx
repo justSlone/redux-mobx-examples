@@ -1,12 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-const Count = ({ count }: {count: number}) => (
+export interface CountProps {
+  count: number
+}
+
+const Count: React.SFC<CountProps> = ({ count }) => (
     <span>{count}</span>
 )
-
-Count.propTypes = {
-  count: PropTypes.number.isRequired
-}
 
 export default Count

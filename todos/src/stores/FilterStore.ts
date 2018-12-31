@@ -6,19 +6,24 @@ export const VisibilityFilters = {
   SHOW_ACTIVE: "SHOW_ACTIVE"
 };
 
-export class FilterStore {    
+
+class FilterStoreState{
   @observable
-  private state = observable.box(VisibilityFilters.SHOW_ALL);
+  visibilityFilter: string = VisibilityFilters.SHOW_ALL
+}
+
+export class FilterStore {  
+  state = new FilterStoreState();
   
-  /* State */
+  /* State */  
   @computed
   get visibilityFilter() {
-    return this.state.get();
+    return this.state.visibilityFilter;
   }
 
   /* Actions */
   @action
-  setVisibilityFilter = (filter: string) => {
-    this.state.set(filter);
+  setVisibilityFilter = (filter: string) => {    
+    this.state.visibilityFilter = filter;
   }
 }

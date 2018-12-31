@@ -1,8 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Todo from './Todo'
+import { TodoItem } from '../stores/TodoStore'
+import { observer } from 'mobx-react'; 
 
-const TodoList = ({ todos, toggleTodo, removeTodo }) => (
+export interface TodoListProps {
+  todos: TodoItem[]  
+  toggleTodo: (id: number)=> void
+  removeTodo: (id: number)=> void
+}
+
+const TodoList: React.SFC<TodoListProps> = ({ todos, toggleTodo, removeTodo }) => (
   <ul>
     {todos.map(todo =>      
       <Todo
@@ -15,13 +22,5 @@ const TodoList = ({ todos, toggleTodo, removeTodo }) => (
   </ul>
 )
 
-TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    completed: PropTypes.bool.isRequired,
-    text: PropTypes.string.isRequired
-  }).isRequired).isRequired,
-  toggleTodo: PropTypes.func.isRequired
-}
-
-export default TodoList
+// Not very happy about having to observe here, but it's because we don't derefernce the array
+export default observer(TodoList)
