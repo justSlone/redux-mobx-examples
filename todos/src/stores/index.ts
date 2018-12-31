@@ -1,6 +1,5 @@
 import { TodoStore, TodoItem } from "./TodoStore";
 import { FilterStore, VisibilityFilters } from "./FilterStore";
-import { computed } from "mobx";
 
 class StoreState {
   todoStore = new TodoStore();
@@ -36,8 +35,7 @@ export class Store {
   removeTodo = this.state.todoStore.removeTodo;
   setVisibilityFilter = this.state.filterStore.setVisibilityFilter;
 
-  /* Utility */
-  @computed
+  /* Utility */  
   get visibleTodos(): TodoItem[] {
     switch (this.visibilityFilter) {
       case VisibilityFilters.SHOW_ALL:
@@ -51,5 +49,6 @@ export class Store {
     }
   }
 }
+
 
 export { VisibilityFilters };
