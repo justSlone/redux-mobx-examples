@@ -1,8 +1,10 @@
 import React from 'react'
 import FilterLink from '../containers/FilterLink'
-import { VisibilityFilters } from '../actions'
+import CompletedCount from '../containers/CompletedCount'
+import { VisibilityFilters } from '../stores/FilterStore'
 
 const Footer = () => (
+  <React.Fragment>
   <div>
     <span>Show: </span>
     <FilterLink filter={VisibilityFilters.SHOW_ALL}>
@@ -15,6 +17,10 @@ const Footer = () => (
       Completed
     </FilterLink>
   </div>
+  <div>
+    <span>Completed: </span><CompletedCount/>
+  </div>
+  </React.Fragment>
 )
 
 export default Footer

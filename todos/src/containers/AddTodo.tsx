@@ -1,18 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { addTodo } from '../actions'
+import { inject } from 'mobx-react'
 
-const AddTodo = ({ dispatch }) => {
-  let input
-
+const AddTodo = inject('store')(({ store }) => {
+  let input: HTMLInputElement | null
   return (
     <div>
       <form onSubmit={e => {
         e.preventDefault()
-        if (!input.value.trim()) {
+        if (!input || !input.value.trim()) {
           return
-        }
-        dispatch(addTodo(input.value))
+        }        
+        store.addTodo(input.value);        
         input.value = ''
       }}>
         <input ref={node => input = node} />
@@ -22,6 +20,6 @@ const AddTodo = ({ dispatch }) => {
       </form>
     </div>
   )
-}
+});
 
-export default connect()(AddTodo)
+export default (AddTodo)
