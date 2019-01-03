@@ -1,20 +1,14 @@
-import React from "react";
 import TodoList from "../components/TodoList";
-import { observer, inject } from "mobx-react";
 import { StoreView, StoreActions, Store } from "../stores";
+import { connect } from "../stores/StoreHelper";
 
-const mapViewToProps = ({ view }: Store) => ({
+const mapViewToProps = (view: StoreView, ownProps: any)  => ({
   todos: view.visibleTodos
 });
 
-const mapActionsToProps = ({ actions }: Store) => ({
+const mapActionsToProps = (actions: StoreActions, ownProps: any)  => ({
   toggleTodo: (id: number) => actions.toggleTodo(id),
   removeTodo: (id: number) => actions.removeTodo(id)
 });
 
-// This can be replaced by a connect function
-export default inject("store")(
-  observer(({ store }) => (
-    <TodoList {...mapViewToProps(store)} {...mapActionsToProps(store)} />
-  ))
-);
+export default connect(mapViewToProps, mapActionsToProps)(TodoList);

@@ -1,15 +1,13 @@
-import React from "react";
 import Count from "../components/Count";
-import { observer, inject } from "mobx-react";
-import { StoreView } from '../stores'
+import { StoreView, StoreActions } from '../stores'
+import {connect} from '../stores/StoreHelper';
 
 const mapViewToProps = (view: StoreView) => ({
   count: view.completedTodosCount
 });
 
-// This can be replaced by a connect function
-export default inject("store")(
-  observer(({ store, ...props }) => (
-    <Count {...mapViewToProps(store.view)} {...props} />
-  ))
-);
+//TODO make this an optional parameter
+const mapActionsToProps = (actions: StoreActions) => ({  
+});
+
+export default connect(mapViewToProps, mapActionsToProps)(Count);

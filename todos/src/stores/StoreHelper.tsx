@@ -1,3 +1,6 @@
+import React from 'react';
+import {inject, observer} from 'mobx-react';
+
 type Constructor<T> = new (...args: any[]) => T;
 
 export class View<T> {
@@ -38,4 +41,13 @@ export function CreateStoreFactory<S, V, A>(
           actions: new Actions(_state)
         };
     }
+}
+
+export function connect (mapViewToProps: (view: any, ownProps: any)=>any, mapActionsToProps: (view: any, ownProps: any)=>void) {
+  return function connector (Component: any) {
+    return inject("store")(
+      observer(({ store, ...props }) => (
+        <Component {...mapViewToProps(store.view, props)} {...mapActionsToProps(store.actions, props)} {...props} />
+      )));
+  }
 }
