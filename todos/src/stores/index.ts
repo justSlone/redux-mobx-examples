@@ -1,12 +1,24 @@
 import { TodoStore, TodoItem } from "./TodoStore";
 import { FilterStore, VisibilityFilters } from "./FilterStore";
 
+
+interface IStore {
+  visibilityFilter: string,
+  todos: TodoItem[],
+  completedTodosCount: number,
+  addTodo: (text:string) => void,
+  toggleTodo: (id: number) => void,
+  removeTodo: (id: number) => void,
+  setVisibilityFilter: (filter: string) => void,
+  visibleTodos: TodoItem[]
+}
+
 class StoreState {
   todoStore = new TodoStore();
   filterStore = new FilterStore();
 }
 
-export class Store {
+export class Store implements IStore {
   private state = new StoreState();
 
   /* State */
