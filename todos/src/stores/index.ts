@@ -51,7 +51,6 @@ export class StoreActions extends Actions<StoreState> {
   setVisibilityFilter = this.state.filterStore.actions.setVisibilityFilter;
 }
 
-const Store = CreateStoreFactory(StoreState, StoreView, StoreActions);
-export { Store };
+export class Store extends CreateStore(StoreState, StoreView, StoreActions) {};
 
 export { VisibilityFilters };
