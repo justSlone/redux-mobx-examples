@@ -1,6 +1,6 @@
 import { TodoStore, TodoItem } from "./TodoStore";
 import { FilterStore, VisibilityFilters } from "./FilterStore";
-import {CreateStore, View, Actions } from './StoreHelper';
+import {CreateStore, View, Actions, CreateStoreFactory } from './StoreHelper';
 
 export class StoreState {
   todoStore = new TodoStore();
@@ -51,7 +51,7 @@ export class StoreActions extends Actions<StoreState> {
   setVisibilityFilter = this.state.filterStore.actions.setVisibilityFilter;
 }
 
-const Store = CreateStore(StoreState, StoreView, StoreActions);
+const Store = CreateStoreFactory(StoreState, StoreView, StoreActions);
 export { Store };
 
 export { VisibilityFilters };

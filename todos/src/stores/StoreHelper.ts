@@ -1,4 +1,4 @@
-type Constructor<T> = new(...args: any[]) => T;
+type Constructor<T> = new (...args: any[]) => T;
 
 export class View<T> {
   constructor(protected state: T) {}
@@ -24,4 +24,18 @@ export function CreateStore<S, V, A>(
     }
   }
   return StoreClass;
+}
+
+export function CreateStoreFactory<S, V, A>(
+  State: Constructor<S>,
+  View: Constructor<V>,
+  Actions: Constructor<A>
+) {
+    return function() {
+        let _state = new State();
+        return {
+          view: new View(_state),
+          actions: new Actions(_state)
+        };
+    }
 }
