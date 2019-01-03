@@ -1,5 +1,5 @@
-import { computed, action, observable, ObservableMap } from "mobx";
-import { createObservableArray, IObservableArray, observe } from "mobx/lib/internal";
+import { computed, action, observable, IObservableArray} from "mobx";
+import { CreateStore, View, Actions } from "./StoreHelper";
 
 export interface TodoItem {
   id: number;
@@ -7,27 +7,26 @@ export interface TodoItem {
   completed?: boolean;
 }
 
-class TodoStoreState{
+class TodoStoreState {
   @observable
   todos: IObservableArray<TodoItem> = observable([]);
 }
 
-export class TodoStore {    
-  private state = new TodoStoreState();
-  
-  /* State */    
+class TodoStoreView extends View<TodoStoreState> {
   get todos() {
     return this.state.todos;
   }
-  
+
   @computed
-  get completedTodosCount() {    
+  get completedTodosCount() {
     return this.state.todos.filter(todo => todo.completed).length;
   }
+}
 
-  /* Actions */
+class TodoStoreActions extends Actions<TodoStoreState> {  
   @action
-  addTodo = ({ id, text }: TodoItem) => { //TODO: this binding is ugly
+  addTodo = ({ id, text }: TodoItem) => {
+    //TODO: this binding is ugly
     this.state.todos.push({
       id,
       text,
@@ -49,3 +48,6 @@ export class TodoStore {
     });
   };
 }
+
+let TodoStore = CreateStore(TodoStoreState, TodoStoreView, TodoStoreActions);
+export { TodoStore };

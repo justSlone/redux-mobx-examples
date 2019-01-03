@@ -1,15 +1,15 @@
 import React from "react";
 import Count from "../components/Count";
 import { observer, inject } from "mobx-react";
-import {Store} from '../stores'
+import { StoreView } from '../stores'
 
-const mapStoreToProps = (store: Store) => ({
-  count: store.completedTodosCount
+const mapViewToProps = (view: StoreView) => ({
+  count: view.completedTodosCount
 });
 
 // This can be replaced by a connect function
 export default inject("store")(
   observer(({ store, ...props }) => (
-    <Count {...mapStoreToProps(store)} {...props} />
+    <Count {...mapViewToProps(store.view)} {...props} />
   ))
 );

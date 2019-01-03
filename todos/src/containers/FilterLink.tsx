@@ -1,18 +1,22 @@
 import React from "react";
 import Link from "../components/Link";
 import { observer, inject } from "mobx-react";
-import {Store} from '../stores'
+import { StoreView, StoreActions } from "../stores";
 
-const mapStoreToProps = (store:Store, ownProps: any) => ({
-  active: ownProps.filter === store.visibilityFilter,
-  onClick: () => store.setVisibilityFilter(ownProps.filter)
+const mapViewToProps = (view: StoreView, ownProps: any) => ({
+  active: ownProps.filter === view.visibilityFilter
+});
+
+const mapActionsToProps = (actions: StoreActions, ownProps: any) => ({
+  onClick: () => actions.setVisibilityFilter(ownProps.filter)
 });
 
 // This can be replaced by a connect function
 export default inject("store")(
   observer(({ store, ...props }) => (
     <Link
-      {...mapStoreToProps(store, props)}      
+      {...mapViewToProps(store.view, props)}
+      {...mapActionsToProps(store.actions, props)}
       {...props}
     />
   ))
