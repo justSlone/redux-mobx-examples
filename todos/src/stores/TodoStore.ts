@@ -49,5 +49,4 @@ class TodoStoreActions extends Actions<TodoStoreState> {
   };
 }
 
-let TodoStore = CreateStore(TodoStoreState, TodoStoreView, TodoStoreActions);
-export { TodoStore };
+export class TodoStore extends CreateStore(TodoStoreState, TodoStoreView, TodoStoreActions) {};

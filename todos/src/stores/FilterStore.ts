@@ -1,4 +1,4 @@
-import { action, decorate, extendObservable, observable, computed, IObservableValue} from "mobx";
+import { action, observable, computed } from "mobx";
 import {View, Actions, CreateStore} from './StoreHelper';
 
 export const VisibilityFilters = {
@@ -26,5 +26,4 @@ class FilterStoreActions extends Actions<FilterStoreState> {
   }
 }
 
-let FilterStore = CreateStore(FilterStoreState, FilterStoreView, FilterStoreActions);
-export {FilterStore};
+export class FilterStore extends CreateStore(FilterStoreState, FilterStoreView, FilterStoreActions) {};
