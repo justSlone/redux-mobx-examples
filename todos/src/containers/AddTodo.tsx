@@ -1,7 +1,7 @@
 import React from 'react'
 import { inject } from 'mobx-react'
 
-const AddTodo = inject('store')(({ store }) => {  
+const AddTodo = inject('actions')(({ actions }) => {  
   let input: HTMLInputElement | null
   return (
     <div>
@@ -10,7 +10,7 @@ const AddTodo = inject('store')(({ store }) => {
         if (!input || !input.value.trim()) {
           return
         }        
-        store.actions.addTodo(input.value);        
+        actions.addTodo(input.value);        
         input.value = ''
       }}>
         <input ref={node => input = node} />

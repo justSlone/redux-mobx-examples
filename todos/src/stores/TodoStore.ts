@@ -12,15 +12,15 @@ class TodoStoreState {
   todos: IObservableArray<TodoItem> = observable([]);
 }
 
-class TodoStoreView extends View<TodoStoreState> {
-  get todos() {
-    return this.state.todos;
-  }
+// class TodoStoreView extends View<TodoStoreState> {
+//   get todos() {
+//     return this.state.todos;
+//   }
 
-  get completedTodosCount() {
-    return this.state.todos.filter(todo => todo.completed).length;
-  }
-}
+//   get completedTodosCount() {
+//     return this.state.todos.filter(todo => todo.completed).length;
+//   }
+// }
 
 class TodoStoreActions extends Actions<TodoStoreState> {  
   @action
@@ -48,4 +48,4 @@ class TodoStoreActions extends Actions<TodoStoreState> {
   };
 }
 
-export class TodoStore extends CreateStore(TodoStoreState, TodoStoreView, TodoStoreActions) {};
+export class TodoStore extends CreateStore(TodoStoreState, TodoStoreActions) {};

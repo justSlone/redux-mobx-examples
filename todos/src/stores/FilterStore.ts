@@ -7,17 +7,17 @@ export const VisibilityFilters = {
   SHOW_ACTIVE: "SHOW_ACTIVE"
 };
 
-class FilterStoreState{
+class FilterStoreState {
   @observable
   visibilityFilter: string = VisibilityFilters.SHOW_ALL
 }
 
-class FilterStoreView extends View<FilterStoreState>{  
-  @computed
-  get visibilityFilter() {
-    return this.state.visibilityFilter;
-  }
-}
+// class FilterStoreView extends View<FilterStoreState>{  
+//   @computed
+//   get visibilityFilter() {
+//     return this.state.visibilityFilter;
+//   }
+// }
 
 class FilterStoreActions extends Actions<FilterStoreState> {  
   @action
@@ -26,4 +26,4 @@ class FilterStoreActions extends Actions<FilterStoreState> {
   }
 }
 
-export class FilterStore extends CreateStore(FilterStoreState, FilterStoreView, FilterStoreActions) {};
+export class FilterStore extends CreateStore(FilterStoreState, FilterStoreActions) {};
