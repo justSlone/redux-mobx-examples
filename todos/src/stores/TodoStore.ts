@@ -1,5 +1,12 @@
-import { computed, action, observable, IObservableArray} from "mobx";
+import { computed, observable, IObservableArray } from "mobx";
 import { CreateStore, View, Actions } from "./StoreHelper";
+import {
+  createStore,
+  action,
+  mutator,
+  orchestrator,
+  mutatorAction
+} from "satcheljs";
 
 export interface TodoItem {
   id: number;
@@ -7,45 +14,35 @@ export interface TodoItem {
   completed?: boolean;
 }
 
-class TodoStoreState {
-  @observable
-  todos: IObservableArray<TodoItem> = observable([]);
-}
+let todoStore = createStore("todoStore", { todos: [] as TodoItem[] });  
 
-class TodoStoreView extends View<TodoStoreState> {
-  get todos() {
-    return this.state.todos;
-  }
-  
-  get completedTodosCount() {    
-    return this.state.todos.filter(todo => todo.completed).length;
-  }
-}
 
-class TodoStoreActions extends Actions<TodoStoreState> {  
-  @action
-  addTodo = ({ id, text }: TodoItem) => {
-    //TODO: this binding is ugly
-    this.state.todos.push({
+let todoActions = {
+  addTodo: mutatorAction("ADD_TODO", function addTodo({id, text}: TodoItem) {
+    todoStore().todos.push({
       id,
-      text,
+      text, 
       completed: false
     });
-  };
+  }),
 
-  @action
-  removeTodo = (id: number) => {
-    this.state.todos.replace(this.state.todos.filter(todo => todo.id !== id));
-  };
-
-  @action
-  toggleTodo = (id: number) => {
-    this.state.todos.forEach(todo => {
+  removeTodo: mutatorAction("REMOVE_TODO", function removeTodo(id: number) {
+    todoStore().todos = todoStore().todos.filter(todo => todo.id !== id);
+  }),
+  
+  toggleTodo: mutatorAction("TOGGLE_TODO", function toggleTodo(id: number) {
+    todoStore().todos.forEach(todo => {
       if (todo.id === id) {
         todo.completed = !todo.completed;
       }
     });
-  };
+  })
 }
 
-export class TodoStore extends CreateStore(TodoStoreState, TodoStoreView, TodoStoreActions) {};
+export {todoStore, todoActions}
+
+// export class TodoStore extends CreateStore(
+//   TodoStoreState,
+//   TodoStoreView,
+//   TodoStoreActions
+// ) {}

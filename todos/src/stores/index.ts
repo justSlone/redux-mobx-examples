@@ -1,10 +1,10 @@
-import { TodoStore, TodoItem } from "./TodoStore";
+import { todoStore, todoActions,  TodoItem } from "./TodoStore";
 import { FilterStore, VisibilityFilters } from "./FilterStore";
 import {CreateStore, View, Actions, CreateStoreFactory } from './StoreHelper';
 import { computed } from "mobx";
 
 export class StoreState {
-  todoStore = new TodoStore();
+  todoStore: any 
   filterStore = new FilterStore();
 }
 
@@ -15,24 +15,24 @@ export class StoreView extends View<StoreState> {
   }
 
   get todos() {
-    return this.state.todoStore.view.todos;
+    return this.state.todoStore.todos;
   }
 
   /* Computed */
   @computed
   get completedTodosCount() {    
-    return this.state.todoStore.view.completedTodosCount;
+    return 0;
   }
 
   /* Utility */
-  get visibleTodos(): TodoItem[] {
+  get visibleTodos(): any[] {
     switch (this.visibilityFilter) {
       case VisibilityFilters.SHOW_ALL:
         return this.todos;
       case VisibilityFilters.SHOW_COMPLETED:
-        return this.todos.filter(t => t.completed);
+        return this.todos.filter((t: any) => t.completed);
       case VisibilityFilters.SHOW_ACTIVE:
-        return this.todos.filter(t => !t.completed);
+        return this.todos.filter((t: any) => !t.completed);
       default:
         throw new Error("Unknown filter: " + this.visibilityFilter);
     }
@@ -43,13 +43,13 @@ export class StoreActions extends Actions<StoreState> {
   /* Actions */
   private _nextTodoId = 0;
   addTodo(text: string) {
-    return this.state.todoStore.actions.addTodo({
+    return todoActions.addTodo({
       id: this._nextTodoId++,
       text
     });
   }
-  toggleTodo = this.state.todoStore.actions.toggleTodo;
-  removeTodo = this.state.todoStore.actions.removeTodo;
+  toggleTodo = todoActions.toggleTodo;
+  removeTodo = todoActions.removeTodo;
   setVisibilityFilter = this.state.filterStore.actions.setVisibilityFilter;
 }
 
