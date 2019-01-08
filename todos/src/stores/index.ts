@@ -1,12 +1,7 @@
 import { TodoStore, TodoItem } from "./TodoStore";
 import { FilterStore, VisibilityFilters } from "./FilterStore";
-<<<<<<< HEAD
 import {CreateStore, View, Actions, CreateStoreFactory } from './StoreHelper';
 import { computed } from "mobx";
-=======
-import { CreateStore, View, Actions, CreateStoreFactory } from './StoreHelper';
-import { computed } from 'mobx';
->>>>>>> d4ae3bd7da1657d7e9dcae62e269337ab23f1eb5
 
 export class StoreState {
   todoStore = new TodoStore();
@@ -25,11 +20,7 @@ export class StoreView extends View<StoreState> {
 
   /* Computed */
   @computed
-<<<<<<< HEAD
   get completedTodosCount() {    
-=======
-  get completedTodosCount() {
->>>>>>> d4ae3bd7da1657d7e9dcae62e269337ab23f1eb5
     return this.state.todoStore.view.completedTodosCount;
   }
 

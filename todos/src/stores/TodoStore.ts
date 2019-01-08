@@ -16,13 +16,8 @@ class TodoStoreView extends View<TodoStoreState> {
   get todos() {
     return this.state.todos;
   }
-<<<<<<< HEAD
   
   get completedTodosCount() {    
-=======
-
-  get completedTodosCount() {
->>>>>>> d4ae3bd7da1657d7e9dcae62e269337ab23f1eb5
     return this.state.todos.filter(todo => todo.completed).length;
   }
 }
