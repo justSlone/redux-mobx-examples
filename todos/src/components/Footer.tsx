@@ -1,7 +1,7 @@
 import React from 'react'
 import FilterLink from '../containers/FilterLink'
 import CompletedCount from '../containers/CompletedCount'
-import { VisibilityFilters } from '../stores/FilterStore'
+import { VisibilityFilters } from '../stores/FilterSchema'
 
 const Footer = () => (
   <React.Fragment>

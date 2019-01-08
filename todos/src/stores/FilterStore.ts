@@ -1,29 +1,19 @@
 import { action, observable, computed } from "mobx";
-import {View, Actions, CreateStore} from './StoreHelper';
+import {createStore, mutatorAction} from 'satcheljs';
+import {DeepReadonly}from "ts-essentials";
+import {VisibilityFilters, FilterState, initialFilterState} from './FilterSchema';
 
-export const VisibilityFilters = {
-  SHOW_ALL: "SHOW_ALL",
-  SHOW_COMPLETED: "SHOW_COMPLETED",
-  SHOW_ACTIVE: "SHOW_ACTIVE"
-};
+export let createFilterStore = (name: string, initialState: FilterState = initialFilterState) => {
+  let localStore = createStore<FilterState>(name, initialState);   
 
-class FilterStoreState{
-  @observable
-  visibilityFilter: string = VisibilityFilters.SHOW_ALL
-}
+  let actions = {
+    setVisibilityFilter: mutatorAction("SET_VISIBILITY", function setVisibilityFilter(filter: VisibilityFilters) {
+      localStore().visibilityFilter = filter;
+    })
+  }
 
-class FilterStoreView extends View<FilterStoreState>{  
-  @computed
-  get visibilityFilter() {
-    return this.state.visibilityFilter;
+  return {
+    store: localStore as () => DeepReadonly<FilterState>,
+    actions: actions
   }
 }
-
-class FilterStoreActions extends Actions<FilterStoreState> {  
-  @action
-  setVisibilityFilter = (filter: string) => {    
-    this.state.visibilityFilter = filter;
-  }
-}
-
-export class FilterStore extends CreateStore(FilterStoreState, FilterStoreView, FilterStoreActions) {};

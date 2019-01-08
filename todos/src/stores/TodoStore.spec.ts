@@ -1,21 +1,22 @@
-import {todoStore, todoActions} from "./TodoStore";
+import {createTodoStore} from "./TodoStore";
 import {toJS} from 'mobx';
+import { TodoState } from "./TodoSchema";
 
-let view = todoStore();
-let actions = todoActions;
+let initialState: TodoState = {
+  todos: [],
+  nextTodoId: 0
+}
 
+let {store: todoStore, actions: todoActions} = createTodoStore("todoStore",initialState);
 
 describe("todo store", () => {
   it("should handle initial todoStore", () => {
-    expect(toJS(view.todos)).toEqual([]);
+    expect(toJS(todoStore().todos)).toEqual([]);
   });
   
   it("should handle ADD_TODO", () => {
-    actions.addTodo({
-      text: "Run the tests",
-      id: 0
-    });
-    expect(toJS(view.todos)).toEqual([
+    todoActions.addTodo("Run the tests");
+    expect(toJS(todoStore().todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -23,11 +24,8 @@ describe("todo store", () => {
       }
     ]);
 
-    actions.addTodo({
-      text: "Use Mobx",
-      id: 1
-    });
-    expect(toJS(view.todos)).toEqual([
+    todoActions.addTodo("Use Mobx");
+    expect(toJS(todoStore().todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -40,12 +38,9 @@ describe("todo store", () => {
       }
     ]);
 
-    actions.addTodo({
-      text: "Fix the tests",
-      id: 2
-    });
+    todoActions.addTodo("Fix the tests");
 
-    expect(toJS(view.todos)).toEqual([
+    expect(toJS(todoStore().todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -65,9 +60,9 @@ describe("todo store", () => {
   });
 
   it("should handle TOGGLE_TODO", () => {
-    actions.toggleTodo(1);
+    todoActions.toggleTodo(1);
 
-    expect(toJS(view.todos)).toEqual([
+    expect(toJS(todoStore().todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,
@@ -87,14 +82,14 @@ describe("todo store", () => {
   });
 
   // it("should handle completedTodosCount", () => {
-  //   expect(toJS(view.completedTodosCount)).toEqual(1);
+  //   expect(toJS(todoStore().completedTodosCount)).toEqual(1);
   // });
 
 
   it("should handle REMOVE_TODO", () => {
-    actions.removeTodo(1);
+    todoActions.removeTodo(1);
 
-    expect(toJS(view.todos)).toEqual([
+    expect(toJS(todoStore().todos)).toEqual([
       {
         text: "Run the tests",
         completed: false,

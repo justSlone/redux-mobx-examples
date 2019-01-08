@@ -1,5 +1,4 @@
-import { computed, observable, IObservableArray } from "mobx";
-import { CreateStore, View, Actions } from "./StoreHelper";
+
 import {
   createStore,
   action,
@@ -7,39 +6,42 @@ import {
   orchestrator,
   mutatorAction
 } from "satcheljs";
+import {TodoItem, TodoState, initialTodoState } from './TodoSchema';
+import {DeepReadonly}from "ts-essentials";
 
-export interface TodoItem {
-  id: number;
-  text: string;
-  completed?: boolean;
-}
+let createTodoStore = (name: string, initialState: TodoState = initialTodoState) => {
+  let localStore = createStore<TodoState>(name, initialState);   
 
-let todoStore = createStore("todoStore", { todos: [] as TodoItem[] });  
-
-
-let todoActions = {
-  addTodo: mutatorAction("ADD_TODO", function addTodo({id, text}: TodoItem) {
-    todoStore().todos.push({
-      id,
-      text, 
-      completed: false
-    });
-  }),
-
-  removeTodo: mutatorAction("REMOVE_TODO", function removeTodo(id: number) {
-    todoStore().todos = todoStore().todos.filter(todo => todo.id !== id);
-  }),
+  let todoActions = {
+    addTodo: mutatorAction("ADD_TODO", function addTodo(text: string) {
+      const store = localStore();
+      store.todos.push({
+        id: store.nextTodoId++,
+        text, 
+        completed: false
+      });
+    }),
   
-  toggleTodo: mutatorAction("TOGGLE_TODO", function toggleTodo(id: number) {
-    todoStore().todos.forEach(todo => {
-      if (todo.id === id) {
-        todo.completed = !todo.completed;
-      }
-    });
-  })
+    removeTodo: mutatorAction("REMOVE_TODO", function removeTodo(id: number) {
+      localStore().todos = localStore().todos.filter(todo => todo.id !== id);
+    }),
+    
+    toggleTodo: mutatorAction("TOGGLE_TODO", function toggleTodo(id: number) {
+      localStore().todos.forEach(todo => {
+        if (todo.id === id) {
+          todo.completed = !todo.completed;
+        }
+      });
+    })
+  }
+
+  return {
+    store: localStore as () => DeepReadonly<TodoState>,
+    actions: todoActions
+  }
 }
 
-export {todoStore, todoActions}
+export {createTodoStore}
 
 // export class TodoStore extends CreateStore(
 //   TodoStoreState,

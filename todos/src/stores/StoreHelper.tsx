@@ -43,11 +43,11 @@ export function CreateStoreFactory<S, V, A>(
     }
 }
 
-export function connect (mapViewToProps: (view: any, ownProps: any)=>any, mapActionsToProps: (view: any, ownProps: any)=>void) {
+export function connect (mapSelectorsToProps: (selectors: any, ownProps: any)=>any, mapActionsToProps: (actions: any, ownProps: any)=>void) {
   return function connector (Component: any) {
     return inject("store")(
       observer(({ store, ...props }) => (
-        <Component {...mapViewToProps(store.view, props)} {...mapActionsToProps(store.actions, props)} {...props} />
+        <Component {...mapSelectorsToProps(store.selectors, props)} {...mapActionsToProps(store.actions, props)} {...props} />
       )));
   }
 }

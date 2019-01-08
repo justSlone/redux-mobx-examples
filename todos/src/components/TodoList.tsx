@@ -1,6 +1,6 @@
 import React from 'react'
 import Todo from './Todo'
-import { TodoItem } from '../stores/TodoStore'
+import { TodoItem } from '../stores/TodoSchema'
 import { observer } from 'mobx-react'; 
 
 export interface TodoListProps {

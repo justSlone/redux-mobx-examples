@@ -1,14 +1,14 @@
 import TodoList from "../components/TodoList";
-import { StoreView, StoreActions, Store } from "../stores";
 import { connect } from "../stores/StoreHelper";
+import { Selectors, Actions } from '../stores'
 
-const mapViewToProps = (view: StoreView, ownProps: any)  => ({
-  todos: view.visibleTodos
+const mapSelectorsToProps = (selectors: Selectors, ownProps: any)  => ({
+  todos: selectors.visibleTodos
 });
 
-const mapActionsToProps = (actions: StoreActions, ownProps: any)  => ({
+const mapActionsToProps = (actions: Actions, ownProps: any)  => ({
   toggleTodo: (id: number) => actions.toggleTodo(id),
   removeTodo: (id: number) => actions.removeTodo(id)
 });
 
-export default connect(mapViewToProps, mapActionsToProps)(TodoList);
+export default connect(mapSelectorsToProps, mapActionsToProps)(TodoList);

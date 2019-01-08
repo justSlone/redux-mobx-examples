@@ -7,7 +7,7 @@ import { configure } from 'mobx';
 configure({enforceActions: "always"});
 
 render(
-  <Provider store={new Store()}>
+  <Provider store={new Store()} >
     <App />    
   </Provider>,
   document.getElementById('root')

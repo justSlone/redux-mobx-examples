@@ -1,13 +1,13 @@
 import Count from "../components/Count";
-import { StoreView, StoreActions } from '../stores'
+import { Store, Selectors, Actions } from '../stores'
 import {connect} from '../stores/StoreHelper';
 
-const mapViewToProps = (view: StoreView) => ({
-  count: view.completedTodosCount
+const mapSelectorsToProps = (selectors: Selectors) => ({
+  count: selectors.completedTodosCount
 });
 
 //TODO make this an optional parameter
-const mapActionsToProps = (actions: StoreActions) => ({  
+const mapActionsToProps = (actions: Actions) => ({
 });
 
-export default connect(mapViewToProps, mapActionsToProps)(Count);
+export default connect(mapSelectorsToProps, mapActionsToProps)(Count);
