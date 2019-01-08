@@ -8,8 +8,10 @@ configure({enforceActions: "always"});
 
 
 let mainStore = new Store();
+let actions = new StoreActions(mainStore);
+console.log(actions);
 render(
-  <Provider view={new StoreView(mainStore.getState())} actions={mainStore.actions}>
+  <Provider view={new StoreView(mainStore.getState())} actions={actions}>
     <App />    
   </Provider>,
   document.getElementById('root')

@@ -7,24 +7,15 @@ export interface TodoItem {
   completed?: boolean;
 }
 
-class TodoStoreState {
+export class TodoStoreState {
   @observable
   todos: IObservableArray<TodoItem> = observable([]);
 }
 
-// class TodoStoreView extends View<TodoStoreState> {
-//   get todos() {
-//     return this.state.todos;
-//   }
-
-//   get completedTodosCount() {
-//     return this.state.todos.filter(todo => todo.completed).length;
-//   }
-// }
-
-class TodoStoreActions extends Actions<TodoStoreState> {  
+export class TodoStoreActions  {  
+  constructor(protected state: TodoStoreState) {}
   @action
-  addTodo = ({ id, text }: TodoItem) => {
+  addTodo({ id, text }: TodoItem) {
     //TODO: this binding is ugly
     this.state.todos.push({
       id,

@@ -1,12 +1,21 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {DeepReadonly} from 'ts-essentials';
+import { AnyPtrRecord } from 'dns';
 
 type Constructor<T> = new (...args: any[]) => T;
 
 export class View<T> {
-  constructor(protected state: DeepReadonly<T>) {}
+  constructor(protected state: DeepReadonly<T>) {
+    
+  }
 } 
+
+export class CompositeState {
+  constructor(...args:any) {
+    Object.assign(this, args);
+  }
+}
 
 export class Actions<T> {
   constructor(protected state: T) {}
