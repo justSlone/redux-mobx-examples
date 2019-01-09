@@ -3,74 +3,59 @@ import {inject, observer} from 'mobx-react';
 import {getRootStore, createStore} from 'satcheljs';
 import {DeepReadonly} from 'ts-essentials';
 
-type Constructor<T> = new (...args: any[]) => T;
-
-export class View<T> {
-  constructor(protected state: T) {}
-}
-export class Actions<T> {
-  constructor(protected store: ()=>T) {}
-}
-
-export function CreateStore<S, V, A>(
-  State: Constructor<S>,
-  View: Constructor<V>,
-  Actions: Constructor<A>
-) {
-  class StoreClass {
-    private state: S;
-    public view: V;
-    public actions: A;
-    constructor() {
-      this.state = new State();
-      this.view = new View(this.state);
-      this.actions = new Actions(this.state);
-    }
-  }
-  return StoreClass;
-}
-
-export function CreateStoreFactory<S, V, A>(
-  State: Constructor<S>,
-  View: Constructor<V>,
-  Actions: Constructor<A>
-) {
-    return function() {
-        let _state = new State();
-        return {
-          view: new View(_state),
-          actions: new Actions(_state)
-        };
-    }
-}
-
-export function CreateSatchelStore<S, A>(
-  initialState: S,
-  Actions: Constructor<A>
-) {
-  class StoreClass {
-    private _store: () => S
-    public actions: A
-    constructor(name: string, state: S = initialState, force: boolean = false) {
-      if(!force && !!getRootStore().get(name)){
-        throw Error(`Store named '${name}' already exists. use force parameter to force re-creation of store`);
-      }
-      this._store = createStore<S>(name, state); 
-      this.actions = new Actions(this._store);
-    }
-  
-    store = () => {
-      return this._store() as DeepReadonly<S>;
-    }
-  }
-  return StoreClass;
-}
-
-export function connect (mapSelectorsToProps: (selectors: any, ownProps: any)=>any, mapActionsToProps: (actions: any, ownProps: any)=>void) {
+export function connect(mapSelectorsToProps: (selectors: any, ownProps: any)=>any, mapActionsToProps: (actions: any, ownProps: any)=>any) {
   return function connector (Component: any) {
     return inject("store")(
       observer(({ store, ...props }) => (
         <Component {...mapSelectorsToProps(store.selectors, props)} {...mapActionsToProps(store.actions, props)} {...props} />
       )));
   }
+}
+
+export function MixObj<A>(a: A): A;
+export function MixObj<A, B>(a: A, b: B): A & B;
+export function MixObj<A, B, C>(a: A, b: B, c: C): A & B & C;
+export function MixObj<A, B, C, D>(a: A, b: B, c: C, d: D): A & B & C & D;
+export function MixObj(...args: any[]): any {
+    const newObj: any = {};
+    for (const obj of args) {
+        for (const key in obj) {
+            //copy all the fields
+            newObj[key] = obj[key];
+        }
+    }
+    return newObj;
+};
+
+export function MixFun<A, A2, B, B2>(fa: (store: A2)=>A, fb: (store: B2)=>B): (store: A2&B2)=> A&B
+export function MixFun<A, A2, B, B2, C, C2>(fa: (store: A2)=>A, fb: (store: B2)=>B, fc: (store: C2)=>C): (store: A2&B2&C2)=> A&B&C
+export function MixFun<A, A2, B, B2, C, C2, D, D2>(fa: (store: A2)=>A, fb: (store: B2)=>B, fc: (store: C2)=>C, fd: (store: D2)=>D): (store: A2&B2&C2&D2)=> A&B&C&D
+export function MixFun<A, A2, B, B2, C, C2, D, D2, E, E2>(fa: (store: A2)=>A, fb: (store: B2)=>B, fc: (store: C2)=>C, fd: (store: D2)=>D, fe: (store: E2)=>E): (store: A2&B2&C2&D2&E2)=> A&B&C&D&E
+export function MixFun(...args: any[]) {
+  return (store: any) => {
+    let retObj = {};
+    for(const f of args) {
+      retObj = MixObj(retObj, f(store));
+    }
+    return retObj;
+  }
+}
+
+export function realizeMixedStore<St, A, Se>(s1: {initialState: St, createActions: (store: ()=>St)=>A, createSelectors: (store: ()=>St)=>Se }) {
+  type State = St
+  type Actions = A
+  type Selectors = Se
+  class MixedClass {
+    private store: ()=>State
+    public getState: ()=>DeepReadonly<State>    
+    public actions: Actions
+    public selectors: Selectors
+    constructor(name: string = "store", initialState: State = s1.initialState) {
+      this.store = createStore<St>(name,initialState); 
+      this.actions = s1.createActions(this.store);
+      this.selectors = s1.createSelectors(this.store);     
+      this.getState = this.store as ()=>DeepReadonly<State>  
+    }    
+  }
+  return MixedClass;
 }

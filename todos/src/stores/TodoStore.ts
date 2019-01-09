@@ -7,36 +7,19 @@ import {
   mutatorAction,
   getRootStore
 } from "satcheljs";
-import {TodoItem, TodoState, initialTodoState } from './TodoSchema';
-import {DeepReadonly}from "ts-essentials";
-import {CreateSatchelStore, Actions} from './StoreHelper';
-import {computed} from 'mobx';
+import { TodoState } from './TodoSchema';
+import { computed } from 'mobx';
 
-
-class TodoActions extends Actions<TodoState> {
-  addTodo = mutatorAction("ADD_TODO", (text: string) => {
-    const store = this.store();
-    store.todos.push({
-      id: store.nextTodoId++,
-      text, 
+const initialState: TodoState = {
+  todos: [{
+      id: 0,
+      text: "Default Todo",
       completed: false
-    });
-  })
-
-  removeTodo = mutatorAction("REMOVE_TODO", (id: number) => {
-    this.store().todos = this.store().todos.filter(todo => todo.id !== id);
-  })
-  
-  toggleTodo = mutatorAction("TOGGLE_TODO", (id: number) => {
-    this.store().todos.forEach(todo => {
-      if (todo.id === id) {
-        todo.completed = !todo.completed;
-      }
-    });
-  })
+  }],
+  nextTodoId: 1
 }
 
-export const createTodoActions = (store: ()=>TodoState) => {
+const createActions = (store: ()=>TodoState) => {
   return {
     addTodo: mutatorAction("ADD_TODO", (text: string) => {
       const _store = store();
@@ -61,7 +44,7 @@ export const createTodoActions = (store: ()=>TodoState) => {
   }
 }
 
-export let createTodoSelectors = (store: () => TodoState) => {
+const createSelectors = (store: () => TodoState) => {
   return {
     completedTodosCount: computed(() => {
       return store().todos.filter(todo => todo.completed).length;
@@ -69,7 +52,9 @@ export let createTodoSelectors = (store: () => TodoState) => {
   }
 }
 
-export class TodoStore extends CreateSatchelStore(initialTodoState, TodoActions) {}
+export const TodoStore = { initialState, createActions, createSelectors};
+
+//export class TodoStore extends CreateSatchelStore(initialTodoState, TodoActions) {}
 
 // export class TodoStore {
 //   private _store: () => TodoState

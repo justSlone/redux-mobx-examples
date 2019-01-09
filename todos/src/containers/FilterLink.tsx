@@ -1,12 +1,12 @@
 import Link from "../components/Link";
 import { connect } from '../stores/StoreHelper';
-import { Selectors, Actions } from '../stores'
+import { StoreActions, StoreSelectors} from '../stores';
 
-const mapSelectorsToProps = (selectors: any, ownProps: any) => ({
+const mapSelectorsToProps = (selectors: StoreSelectors, ownProps: any) => ({
   active: ownProps.filter === selectors.getVisibilityFilter()
 });
 
-const mapActionsToProps = (actions: Actions, ownProps: any) => ({
+const mapActionsToProps = (actions: StoreActions, ownProps: any) => ({
   onClick: () => actions.setVisibilityFilter(ownProps.filter)
 });
 

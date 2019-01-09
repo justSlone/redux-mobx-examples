@@ -1,4 +1,5 @@
 import {TodoStore} from "./TodoStore";
+import {realizeMixedStore} from './StoreHelper';
 import {toJS} from 'mobx';
 import { TodoState } from "./TodoSchema";
 
@@ -9,9 +10,10 @@ let initialState: TodoState = {
 
 // let {store: todoStore, actions: todoActions} = createTodoStore("todoStore",initialState);
 
-let foo = new TodoStore("todoStore", initialState);
-var todoStore = foo.store;
-let todoActions = foo.actions;
+class TodoStoreClass extends realizeMixedStore(TodoStore) {}
+let todoStoreClass = new TodoStoreClass("todoStore", initialState);
+var todoStore = todoStoreClass.getState;
+let todoActions = todoStoreClass.actions;
 
 describe("todo store", () => {
   it("should handle initial todoStore", () => {

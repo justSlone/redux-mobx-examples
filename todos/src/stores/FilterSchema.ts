@@ -8,7 +8,3 @@ export enum VisibilityFilters {
     visibilityFilter: VisibilityFilters
   }
   
-  export const initialFilterState: FilterState = {
-    visibilityFilter: VisibilityFilters.SHOW_ALL
-  }
-  
