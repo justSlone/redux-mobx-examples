@@ -83,6 +83,25 @@ function MixStore<S1, S2>(s1: MixableStore<S1>, s2: MixableStore<S2>) {
   } as MixableStore<S1&S2>
 }
 
+
+/**
+ * Quick and dirty shallow extend
+ */
+export function extend<A>(a: A): A;
+export function extend<A, B>(a: A, b: B): A & B;
+export function extend<A, B, C>(a: A, b: B, c: C): A & B & C;
+export function extend<A, B, C, D>(a: A, b: B, c: C, d: D): A & B & C & D;
+export function extend(...args: any[]): any {
+    const newObj: any = {};
+    for (const obj of args) {
+        for (const key in obj) {
+            //copy all the fields
+            newObj[key] = obj[key];
+        }
+    }
+    return newObj;
+};
+
 let filter: MixableStore<FilterState> = {
   initialState: initialFilterState,
   createActions: createFilterActions,
