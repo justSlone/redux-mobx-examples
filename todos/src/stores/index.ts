@@ -14,6 +14,23 @@ import { createStore, mutatorAction} from "satcheljs";
 // let composedActions = {...fActions, ...tActions};
 
 
+/**
+ * Quick and dirty shallow extend
+ */
+export function extend<A>(a: A): A;
+export function extend<A, B>(a: A, b: B): A & B;
+export function extend<A, B, C>(a: A, b: B, c: C): A & B & C;
+export function extend<A, B, C, D>(a: A, b: B, c: C, d: D): A & B & C & D;
+export function extend(...args: any[]): any {
+    const newObj: any = {};
+    for (const obj of args) {
+        for (const key in obj) {
+            //copy all the fields
+            newObj[key] = obj[key];
+        }
+    }
+    return newObj;
+};
 
 // export function CreateSatchelStore<S, A>(
 //   initialState: S,
@@ -55,16 +72,6 @@ interface MixableStore<S> {
   createSelectors: (store: ()=>any)=>any
 }
 
-// function MixStore<S1, S2>(s1: MixableStore<S1>, s2: MixableStore<S2>) {
-//   class MixedClass {
-//     constructor(public store: () => S1&S2){}
-//     static initialState = {...s1.initialState as unknown as object, ...s2.initialState as unknown as object} as S1&S2
-//     public actions = {...s1.createActions(this.store), ...s2.createActions(this.store)}
-//     public selectors = {...s1.createSelectors(this.store), ...s2.createSelectors(this.store)}
-//   }
-//   return MixedClass
-// }
-
 function MixStore<S1, S2>(s1: MixableStore<S1>, s2: MixableStore<S2>) {
   return {
     initialState: {...s1.initialState as unknown as object, ...s2.initialState as unknown as object} as S1&S2,
@@ -83,36 +90,78 @@ function MixStore<S1, S2>(s1: MixableStore<S1>, s2: MixableStore<S2>) {
   } as MixableStore<S1&S2>
 }
 
+// function MixStore<S1, S2>(s1: MixableStore<S1>, s2: MixableStore<S2>) {
+//   class MixedClass {
+//     constructor(public store: () => S1&S2){}
+//     static initialState = {...s1.initialState as unknown as object, ...s2.initialState as unknown as object} as S1&S2
+//     public actions = {...s1.createActions(this.store), ...s2.createActions(this.store)}
+//     public selectors = {...s1.createSelectors(this.store), ...s2.createSelectors(this.store)}
+//   }
+//   return MixedClass
+// }
 
-/**
- * Quick and dirty shallow extend
- */
-export function extend<A>(a: A): A;
-export function extend<A, B>(a: A, b: B): A & B;
-export function extend<A, B, C>(a: A, b: B, c: C): A & B & C;
-export function extend<A, B, C, D>(a: A, b: B, c: C, d: D): A & B & C & D;
-export function extend(...args: any[]): any {
-    const newObj: any = {};
-    for (const obj of args) {
-        for (const key in obj) {
-            //copy all the fields
-            newObj[key] = obj[key];
-        }
+
+// export function extend<A>(a: A): A;
+// export function extend<A, B>(a: A, b: B): A & B;
+// export function extend<A, B, C>(a: A, b: B, c: C): A & B & C;
+// export function extend<A, B, C, D>(a: A, b: B, c: C, d: D): A & B & C & D;
+
+function MixFun2<A, A2, B, B2>(fa: (store: A2)=>A, fb: (store: B2)=>B): (store: A2&B2)=> A&B
+function MixFun2<A, A2, B, B2, C, C2>(fa: (store: A2)=>A, fb: (store: B2)=>B, fc: (store: C2)=>C): (store: A2&B2&C2)=> A&B&C
+// function MixFun2<A, B, C, D>(fa: (store: any)=>A, fb: (store: any)=>B, fc: (store: any)=>C, fd: (store: any)=>D): (store: any)=> A&B&C&D
+// function MixFun2<A, B, C, D, E>(fa: (store: any)=>A, fb: (store: any)=>B, fc: (store: any)=>C, fd: (store: any)=>D, fe: (store: any)=>E): (store: any)=> A&B&C&D&E
+function MixFun2(...args: any[]) {
+  return (store: any) => {
+    let retObj = {};
+    for(const f of args) {
+      retObj = extend(retObj, f(store));
     }
-    return newObj;
-};
+    return retObj;
+  }
+}
 
-let filter: MixableStore<FilterState> = {
+
+
+// export function extend(...args: any[]): any {
+//     const newObj: any = {};
+//     for (const obj of args) {
+//         for (const key in obj) {
+//             //copy all the fields
+//             newObj[key] = obj[key];
+//         }
+//     }
+//     return newObj;
+// };
+
+function MixFunction<S1, S2, R1, R2>(s1: (store: S1)=>R1, s2: (store: S2)=>R2){
+  return (store: S1&S2): R1&R2 => {
+    return extend(s1(store), s2(store))
+  }
+}
+// function MixStore<S1, S2>(s1: S1, s2: S2) {
+//   return {
+//     initialState: extend(s1.initialState, s2.initialState),
+//     createActions: MixFunction(s1.createActions, s2.createActions),
+//     createSelectors: MixFunction(s1.createSelectors, s2.createSelectors),
+//   } as MixableStore<S1&S2>
+// }
+
+
+// let obC = extend(obA, obB);
+
+let filter = {
   initialState: initialFilterState,
   createActions: createFilterActions,
   createSelectors: createFilterSelectors
 }
 
-let todo: MixableStore<TodoState> = {
+let todo = {
   initialState: initialTodoState,
   createActions: createTodoActions,
   createSelectors: createTodoSelectors
 }
+
+
 
 let createNewSelectors = (store: () => TodoState&FilterState) => {
   return {
@@ -137,12 +186,53 @@ let newStore: MixableStore<{}> = {
   createSelectors: createNewSelectors
 }
 
+let newStore2 = {
+  createSelectors: createNewSelectors
+}
+
+
+let test = MixFun2(filter.createActions, todo.createActions, createNewSelectors);
+test(()=>{})
+
+
+
+
+
+
+let mixA_old = {
+  initialState: extend(filter.initialState, todo.initialState),
+  createActions: MixFunction(filter.createActions, todo.createActions),
+  createSelectors: MixFunction(filter.createSelectors, todo.createSelectors)
+} 
+
+ function MixAgain<S1, S2>(a: S1, b: S2): S1 & S2 {
+  type typeA = typeof a;
+  type typeB = typeof b;
+  return {
+    initialState: {...a.initialState, ...b.initialState} as typeof a.initialState & typeof b.initialState,
+  }
+}
+
+let mixA = MixAgain(filter, todo);
+
+
+let newMix = {
+  initialState: mixA.initialState,
+  createActions: mixA.createActions,
+  createSelectors: MixFunction(mixA.createSelectors, createNewSelectors)
+}
+
+let newMixStore = createStore("foo", newMix.initialState);
+let newMixActions = newMix.createActions(newMixStore);
+
+
+
 function realizeMixedStore<S1>(s1: MixableStore<S1>) {
   class MixedClass {
     private store = createStore<S1>("store", s1.initialState);
-    static initialState = {...s1.initialState as unknown as object} as S1
-    public actions = {...s1.createActions(this.store)}
-    public selectors = {...s1.createSelectors(this.store)}
+    static initialState = s1.initialState
+    public actions = s1.createActions(this.store)
+    public selectors = s1.createSelectors(this.store)
   }
   return MixedClass
 }
