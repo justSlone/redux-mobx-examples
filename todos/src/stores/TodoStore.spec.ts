@@ -1,4 +1,4 @@
-import {createTodoStore} from "./TodoStore";
+import {TodoStore} from "./TodoStore";
 import {toJS} from 'mobx';
 import { TodoState } from "./TodoSchema";
 
@@ -7,7 +7,11 @@ let initialState: TodoState = {
   nextTodoId: 0
 }
 
-let {store: todoStore, actions: todoActions} = createTodoStore("todoStore",initialState);
+// let {store: todoStore, actions: todoActions} = createTodoStore("todoStore",initialState);
+
+let foo = new TodoStore("todoStore", initialState);
+var todoStore = foo.store;
+let todoActions = foo.actions;
 
 describe("todo store", () => {
   it("should handle initial todoStore", () => {

@@ -17,3 +17,20 @@ export let createFilterStore = (name: string, initialState: FilterState = initia
     actions: actions
   }
 }
+
+export const createFilterActions = (store: () => FilterState) => {
+  return {
+    setVisibilityFilter: mutatorAction("SET_VISIBILITY", function setVisibilityFilter(filter: VisibilityFilters) {
+      store().visibilityFilter = filter;
+    })
+  }
+  
+}
+
+export const createFilterSelectors = (store: () => FilterState) => {
+  return {
+    getVisibilityFilter: () => {
+      return store().visibilityFilter;
+    }
+  }
+}

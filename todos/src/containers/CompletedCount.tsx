@@ -1,9 +1,9 @@
 import Count from "../components/Count";
-import { Store, Selectors, Actions } from '../stores'
+import { Selectors, Actions } from '../stores'
 import {connect} from '../stores/StoreHelper';
 
-const mapSelectorsToProps = (selectors: Selectors) => ({
-  count: selectors.completedTodosCount
+const mapSelectorsToProps = (selectors: any) => ({
+  count: selectors.completedTodosCount.get()
 });
 
 //TODO make this an optional parameter

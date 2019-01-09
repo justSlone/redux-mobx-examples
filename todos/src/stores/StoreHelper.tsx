@@ -1,14 +1,15 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import {getRootStore, createStore} from 'satcheljs';
+import {DeepReadonly} from 'ts-essentials';
 
 type Constructor<T> = new (...args: any[]) => T;
 
 export class View<T> {
   constructor(protected state: T) {}
 }
-
 export class Actions<T> {
-  constructor(protected state: T) {}
+  constructor(protected store: ()=>T) {}
 }
 
 export function CreateStore<S, V, A>(
@@ -41,6 +42,28 @@ export function CreateStoreFactory<S, V, A>(
           actions: new Actions(_state)
         };
     }
+}
+
+export function CreateSatchelStore<S, A>(
+  initialState: S,
+  Actions: Constructor<A>
+) {
+  class StoreClass {
+    private _store: () => S
+    public actions: A
+    constructor(name: string, state: S = initialState, force: boolean = false) {
+      if(!force && !!getRootStore().get(name)){
+        throw Error(`Store named '${name}' already exists. use force parameter to force re-creation of store`);
+      }
+      this._store = createStore<S>(name, state); 
+      this.actions = new Actions(this._store);
+    }
+  
+    store = () => {
+      return this._store() as DeepReadonly<S>;
+    }
+  }
+  return StoreClass;
 }
 
 export function connect (mapSelectorsToProps: (selectors: any, ownProps: any)=>any, mapActionsToProps: (actions: any, ownProps: any)=>void) {

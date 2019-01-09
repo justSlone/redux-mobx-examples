@@ -2,8 +2,8 @@ import TodoList from "../components/TodoList";
 import { connect } from "../stores/StoreHelper";
 import { Selectors, Actions } from '../stores'
 
-const mapSelectorsToProps = (selectors: Selectors, ownProps: any)  => ({
-  todos: selectors.visibleTodos
+const mapSelectorsToProps = (selectors: any, ownProps: any)  => ({
+  todos: selectors.getVisibleTodos()
 });
 
 const mapActionsToProps = (actions: Actions, ownProps: any)  => ({
