@@ -19,29 +19,37 @@ const initialState: TodoState = {
   nextTodoId: 1
 }
 
+
 const createActions = (store: ()=>TodoState) => {
-  return {
-    addTodo: mutatorAction("ADD_TODO", (text: string) => {
-      const _store = store();
-      _store.todos.push({
-        id: _store.nextTodoId++,
-        text, 
-        completed: false
-      });
-    }),
+  let actions = {
+    addTodo: action(
+      'ADD_TODO',
+      (text: string) => ({ text: text })
+    ),
   
-    removeTodo: mutatorAction("REMOVE_TODO", (id: number) => {
+    removeTodo: mutatorAction("REMOVE_TODO", function removeTodo (id: number) {
       store().todos = store().todos.filter(todo => todo.id !== id);
     }),
     
-    toggleTodo: mutatorAction("TOGGLE_TODO", (id: number) => {
+    toggleTodo: mutatorAction("TOGGLE_TODO", function toggleTodo(id: number) {
       store().todos.forEach(todo => {
         if (todo.id === id) {
           todo.completed = !todo.completed;
         }
       });
     })
-  }
+  }  
+
+  mutator(actions.addTodo, (actionMessage) => {
+    const _store = store();
+    _store.todos.push({
+      id: _store.nextTodoId++,
+      text: actionMessage.text, 
+      completed: false
+    });
+  });
+
+  return actions;
 }
 
 const createSelectors = (store: () => TodoState) => {
