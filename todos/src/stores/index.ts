@@ -2,7 +2,7 @@ import { TodoStore } from "./TodoStore";
 import { FilterStore} from "./FilterStore";
 import { VisibilityFilters, FilterState } from './FilterSchema';
 import { TodoState } from './TodoSchema';
-import {MixObj, MixFun, realizeMixedStore} from './StoreHelper';
+import {MixObj, MixFun, realizeMixedStore, createStoreFromTemplate, createConnectFromTemplate, getTypesFromTemplate, MixFun2} from './StoreHelper';
 
 let createNewSelectors = (store: () => TodoState&FilterState) => {
   return {
@@ -24,10 +24,14 @@ let createNewSelectors = (store: () => TodoState&FilterState) => {
 export const MixedStoreTemplate = {
   initialState: MixObj(FilterStore.initialState, TodoStore.initialState),
   createActions: MixFun(FilterStore.createActions, TodoStore.createActions),
-  createSelectors: MixFun(FilterStore.createSelectors, TodoStore.createSelectors, createNewSelectors)
+  createSelectors: MixFun(FilterStore.createSelectors, TodoStore.createSelectors, createNewSelectors),
+  registerMutators: MixFun2(FilterStore.registerMutators, TodoStore.registerMutators),
+  registerOrchestrators: MixFun2(FilterStore.registerOrchestrators, TodoStore.registerOrchestrators)
 } 
 
+export const {store, connect} = createStoreFromTemplate("mystore", MixedStoreTemplate)
+export type StoreState = ReturnType<typeof store.getState>;
+export type StoreActions = typeof store.actions;
+export type StoreSelectors = typeof store.selectors;
+
 export class MixedStore extends realizeMixedStore(MixedStoreTemplate){}
-export type StoreState = ReturnType<typeof MixedStore.prototype.getState>;
-export type StoreActions = typeof MixedStore.prototype.actions;
-export type StoreSelectors = typeof MixedStore.prototype.selectors;

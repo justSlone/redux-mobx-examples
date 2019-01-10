@@ -1,15 +1,16 @@
-import {mutatorAction} from 'satcheljs';
+import {mutatorAction, mutator, orchestrator, action} from 'satcheljs';
 import {VisibilityFilters, FilterState } from './FilterSchema';
 
 const initialFilterState: FilterState = {
   visibilityFilter: VisibilityFilters.SHOW_ALL
 }
 
-const createFilterActions = (store: () => FilterState) => {
+const createActions = (store: () => FilterState) => {
   return {
-    setVisibilityFilter: mutatorAction("SET_VISIBILITY", function setVisibilityFilter(filter: VisibilityFilters) {
-      store().visibilityFilter = filter;
-    })
+    setVisibilityFilter: action(
+      'SET_VISIBILITY',
+      (filter: VisibilityFilters) => ({ filter })
+    ),
   }
 }
 
@@ -21,7 +22,17 @@ const createFilterSelectors = (store: () => FilterState) => {
   }
 }
 
-export const FilterStore = {initialState: initialFilterState, createActions: createFilterActions, createSelectors: createFilterSelectors };
+const registerMutators = (store: () => FilterState, actions: ReturnType<typeof createActions>) => {
+  mutator(actions.setVisibilityFilter, (actionMessage) => {
+    store().visibilityFilter = actionMessage.filter;
+  });
+}
+
+const registerOrchestrators = (actions: ReturnType<typeof createActions>) => {
+
+}
+
+export const FilterStore = {initialState: initialFilterState, createActions, createSelectors: createFilterSelectors, registerMutators, registerOrchestrators };
 
 
 // export let createFilterStore = (name: string, initialState: FilterState = initialFilterState) => {

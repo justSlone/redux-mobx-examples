@@ -7,8 +7,8 @@ const mapSelectorsToProps = (selectors: StoreSelectors, ownProps: any)  => ({
 });
 
 const mapActionsToProps = (actions: StoreActions, ownProps: any)  => ({
-  toggleTodo: (id: number) => actions.toggleTodo(id),
-  removeTodo: (id: number) => actions.removeTodo(id)
+  toggleTodo: actions.toggleTodo,
+  removeTodo: actions.removeTodo
 });
 
 export default connect(mapSelectorsToProps, mapActionsToProps)(TodoList);

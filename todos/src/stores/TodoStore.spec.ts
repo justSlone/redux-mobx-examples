@@ -1,7 +1,8 @@
 import {TodoStore} from "./TodoStore";
-import {realizeMixedStore} from './StoreHelper';
+import {realizeMixedStore, createStoreFromTemplate} from './StoreHelper';
 import {toJS} from 'mobx';
 import { TodoState } from "./TodoSchema";
+import Todo from "../components/Todo";
 
 let initialState: TodoState = {
   todos: [],
@@ -9,11 +10,8 @@ let initialState: TodoState = {
 }
 
 // let {store: todoStore, actions: todoActions} = createTodoStore("todoStore",initialState);
-
-class TodoStoreClass extends realizeMixedStore(TodoStore) {}
-let todoStoreClass = new TodoStoreClass("todoStore", initialState);
-var todoStore = todoStoreClass.getState;
-let todoActions = todoStoreClass.actions;
+TodoStore.initialState = initialState;
+let { store: {getState: todoStore, actions: todoActions}} = createStoreFromTemplate("todoStore", TodoStore);
 
 describe("todo store", () => {
   it("should handle initial todoStore", () => {

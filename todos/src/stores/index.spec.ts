@@ -1,9 +1,9 @@
 import {MixedStore, MixedStoreTemplate} from "./";
 import { VisibilityFilters} from "./FilterSchema";
+import { createStoreFromTemplate } from "./StoreHelper";
 
 let initalState = MixedStoreTemplate.initialState;
-
-let {getState: store, actions, selectors} = new MixedStore("testStore", initalState);
+let {store: {getState: store, actions, selectors}} = createStoreFromTemplate("testStore", MixedStoreTemplate);
 
 describe("todo store", () => {
   it("should handle initial filterState", () => {
