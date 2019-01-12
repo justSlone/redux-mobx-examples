@@ -9,7 +9,7 @@ export interface MeasureProps {
   onRemoveClick: ()=>void  
 }
 
-const MeasureComponent: React.SFC<MeasureProps> = ({ id, title, targets, onRemoveClick}) => (
+const MeasureComponent: React.SFC<MeasureProps> = ({ id, title, targets, onRemoveClick }) => (
   <li
     // onClick={onClick}
     style={{
@@ -17,7 +17,7 @@ const MeasureComponent: React.SFC<MeasureProps> = ({ id, title, targets, onRemov
     }}
   >
     {`${id} : ${title} Target=${targets[0].value}`}&nbsp;
-    <button onClick={e=>{e.stopPropagation();onRemoveClick()}}>-</button>
+    <button onClick={e=>{e.stopPropagation(); onRemoveClick()}}>-</button>
   </li>
 )
 

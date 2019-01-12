@@ -1,26 +1,21 @@
 import React from 'react'
 import StoryComponent from './StoryComponent'
 import { Story } from '../stores/TreeStoreSchema'
-import { observer } from 'mobx-react'; 
-import {store} from '../stores';
+import { observer } from 'mobx-react';
+import { store } from '../stores';
 
 export interface StoryList {
-  stories: Story[]    
+  storyIds: number[]
 }
 
 // ()=>(store.actions.collapseStory(story.id))
 // ()=>(story.collapsed = !story.collapsed)
-const StoryList: React.SFC<StoryList> = ({ stories }) => (
+const StoryList: React.SFC<StoryList> = ({ storyIds }) => (
   <ul>
-    {stories.map(story =>      
-      <StoryComponent key={story.id} {...story} 
-      measureCount={store.selectors.getMeasureCount(story)} 
-      onClick={()=>(store.actions.collapseNode(story))} 
-      onAddClick={()=>{store.actions.addMeasure(story)}}
-      removeFromStory={
-        (measureId: number)=>{store.actions.removeMeasureFromStory(story, measureId)}
-      } 
+    {store.selectors.getStories(storyIds).map(story => (
+      <StoryComponent key={story.id} {...story} onClick={()=>{store.actions.collapseStory(story.id)}}
       />
+    )
     )}
   </ul>
 )

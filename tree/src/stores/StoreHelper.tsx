@@ -65,14 +65,14 @@ export function realizeMixedStore<St, A, Se>(s1: {
   type Selectors = Se
   class MixedClass {
     private store: () => State
-    public getState: () => DeepReadonly<State>
+    public getState: () => State
     public actions: Actions
     public selectors: Selectors
     constructor(name: string, initialState: State = s1.initialState) {
       this.store = createStore<St>(name, initialState);
       this.actions = s1.createActions(this.store);
       this.selectors = s1.createSelectors(this.store);
-      this.getState = this.store as () => DeepReadonly<State>
+      this.getState = this.store; //as () => DeepReadonly<State>
     }
   }
   return MixedClass;
@@ -82,7 +82,7 @@ export function createStoreFromTemplate<St, A, Se>(name: string, template: {
   initialState: St, 
   createActions: (store: () => St) => A, 
   createSelectors: (store: () => St) => Se, 
-  registerMutators: (store: ()=>St, actions: A) => void,
+  registerMutators: (store: ()=>St, actions: A, selectors: Se) => void,
   registerOrchestrators: (actions: A) => void
 }) {
   type State = St
@@ -90,11 +90,11 @@ export function createStoreFromTemplate<St, A, Se>(name: string, template: {
   type Selectors = Se
   let _store = createStore<State>(name, template.initialState);
   let store = {
-    getState: _store as () => DeepReadonly<State>,
+    getState: _store, //as () => DeepReadonly<State>,
     actions: template.createActions(_store),
     selectors: template.createSelectors(_store)
   }
-  template.registerMutators(_store, store.actions);
+  template.registerMutators(_store, store.actions, store.selectors);
   template.registerOrchestrators(store.actions);
 
   let connect = function connect<T>(mapSelectorsToProps: (selectors: Se, ownProps: T) => any, mapActionsToProps: (actions: A, ownProps: T) => any) {

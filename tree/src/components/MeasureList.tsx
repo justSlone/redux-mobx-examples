@@ -5,15 +5,15 @@ import { observer } from 'mobx-react';
 import { store} from '../stores';
 
 export interface MeasureList {
-  removeFromStory: (measureId: number)=>void
-  measures: Measure[]
+  // removeFromStory: (measureId: number)=>void
+  measureIds: number[],
+  storyId: number
 }
 
-const MeasureList: React.SFC<MeasureList> = ({ removeFromStory, measures }) => (
+const MeasureList: React.SFC<MeasureList> = ({ measureIds, storyId}) => (
   <ul>
-    {measures.map(measure =>      
-      <MeasureComponent key={measure.id} {...measure} 
-      onRemoveClick={()=>{removeFromStory(measure.id)}}/>
+    {store.selectors.getMeasures(measureIds).map( measure =>      
+      <MeasureComponent key={measure.id} {...measure} onRemoveClick={()=>{store.actions.removeMeasure(storyId, measure.id)}}  />
     )}
   </ul>
 )

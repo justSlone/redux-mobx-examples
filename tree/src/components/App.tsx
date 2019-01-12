@@ -6,7 +6,7 @@ import { store } from '../stores';
 const App = () => (
   <div>
     Hello
-    <AreaList areas={store.selectors.getAreas()} />
+    <AreaList areaIds={store.getState().childIds} />
     <DevTools />
   </div>
 )

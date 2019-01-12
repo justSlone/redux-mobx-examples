@@ -1,25 +1,21 @@
 import React from 'react'
-import {Story} from '../stores/TreeStoreSchema';
+import {Story, Area} from '../stores/TreeStoreSchema';
 import StoryList from './StoryList';
 
-export interface AreaProps {
+export interface AreaProps extends Area {
   onClick: ()=> void
   // onRemoveClick: ()=>void  
-  id: number,
-  name: string,
-  collapsed: boolean,
-  stories: Story[]  
 }
 
-const AreaComponent: React.SFC<AreaProps> = ({ id, name, stories, collapsed, onClick }) => (
+const AreaComponent: React.SFC<AreaProps> = ({ id, name, childIds: storyIds, collapsed, onClick }) => (
   <li
     onClick={e=>{e.stopPropagation(); onClick()}}
     style={{
       listStyleType: collapsed ? 'disc':'circle'
     }}
   >
-    {`${id} : ${name} : ${stories.length}`}
-    {!collapsed && <StoryList stories={stories}/>}
+    {`${id} : ${name} : ${storyIds.length}`}
+    {!collapsed && <StoryList storyIds={storyIds}/>}
   </li>
 )
 

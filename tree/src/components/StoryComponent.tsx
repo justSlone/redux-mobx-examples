@@ -4,25 +4,25 @@ import MeasureList from './MeasureList';
 
 export interface StoryProps {
   onClick: ()=> void
-  onAddClick: ()=> void
-  removeFromStory: (measureId: number)=>void
+  // onAddClick: ()=> void
+  //removeFromStory: (measureId: number)=>void
   id: number,
   title: string,
-  measureCount: number,
-  measures: Measure[],
-  collapsed: boolean
+  // measureCount: number,
+  collapsed: boolean,
+  childIds: number[]
 }
 
-const StoryComponent: React.SFC<StoryProps> = ({ id, title, measureCount, measures, collapsed,  onClick, onAddClick, removeFromStory}) => (
+const StoryComponent: React.SFC<StoryProps> = ({ id, title, childIds: measureIds, collapsed, onClick }) => (
   <li    
     onClick={e=>{e.stopPropagation(); onClick()}}
     style={{
       listStyleType: collapsed ? 'disc':'circle'
     }}
   >
-    {`${id} : ${title} : ${measureCount}`}&nbsp;
-    <button onClick={e=>{e.stopPropagation();onAddClick()}}>+</button>    
-    {!collapsed && <MeasureList measures={measures} removeFromStory={removeFromStory}/>}
+    {`${id} : ${title} : ${measureIds.length}`}&nbsp;
+    {/* <button onClick={e=>{e.stopPropagation();onAddClick()}}>+</button>     */}
+    {!collapsed && <MeasureList measureIds={measureIds} storyId={id}/>}
   </li>
 )
 
