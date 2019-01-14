@@ -83,7 +83,7 @@ export function createStoreFromTemplate<St, A, Se>(name: string, template: {
   createActions: (store: () => St) => A, 
   createSelectors: (store: () => St) => Se, 
   registerMutators: (store: ()=>St, actions: A, selectors: Se) => void,
-  registerOrchestrators: (actions: A) => void
+  registerOrchestrators: (actions: A, selectors: Se) => void
 }) {
   type State = St
   type Actions = A
@@ -95,7 +95,7 @@ export function createStoreFromTemplate<St, A, Se>(name: string, template: {
     selectors: template.createSelectors(_store)
   }
   template.registerMutators(_store, store.actions, store.selectors);
-  template.registerOrchestrators(store.actions);
+  template.registerOrchestrators(store.actions, store.selectors);
 
   let connect = function connect<T>(mapSelectorsToProps: (selectors: Se, ownProps: T) => any, mapActionsToProps: (actions: A, ownProps: T) => any) {
     return function connector(Component: any) {

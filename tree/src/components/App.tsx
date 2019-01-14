@@ -5,8 +5,8 @@ import { store } from '../stores';
 
 const App = () => (
   <div>
-    Hello
-    <AreaList areaIds={store.getState().childIds} />
+    Hello    
+    <AreaList areaIds={store.getState().root.childIds} />        
     <DevTools />
   </div>
 )

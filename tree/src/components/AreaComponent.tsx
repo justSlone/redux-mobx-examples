@@ -1,22 +1,34 @@
 import React from 'react'
-import {Story, Area} from '../stores/TreeStoreSchema';
+import {Story, Area, makeEmptyStory} from '../stores/TreeStoreSchema';
 import StoryList from './StoryList';
+import {observer} from 'mobx-react';
 
 export interface AreaProps extends Area {
   onClick: ()=> void
-  // onRemoveClick: ()=>void  
+  addStory: (s: Story)=> void
+  onRemoveClick: ()=>void
+  isCollapsed: boolean
 }
 
-const AreaComponent: React.SFC<AreaProps> = ({ id, name, childIds: storyIds, collapsed, onClick }) => (
+const S1 = makeEmptyStory();
+const S2 = makeEmptyStory();
+const S3 = makeEmptyStory();
+
+const AreaComponent: React.SFC<AreaProps> = ({ id, name, childIds: storyIds, isCollapsed, onClick, addStory, onRemoveClick}) => (
   <li
     onClick={e=>{e.stopPropagation(); onClick()}}
     style={{
-      listStyleType: collapsed ? 'disc':'circle'
+      listStyleType: isCollapsed ? 'disc':'circle'
     }}
   >
-    {`${id} : ${name} : ${storyIds.length}`}
-    {!collapsed && <StoryList storyIds={storyIds}/>}
+    {`${id} : ${name} : ${0}`}
+    <button onClick={e=>{e.stopPropagation(); addStory(makeEmptyStory())}}>+</button>    
+    <button onClick={e=>{e.stopPropagation(); onRemoveClick()}}>-</button>   
+    <button onClick={e=>{e.stopPropagation(); addStory(S1)}}>S1</button>&nbsp;
+    <button onClick={e=>{e.stopPropagation(); addStory(S2)}}>S2</button>&nbsp;
+    <button onClick={e=>{e.stopPropagation(); addStory(S3)}}>S3</button>&nbsp;
+    {!isCollapsed && <StoryList storyIds={storyIds} areaId={id}/>}
   </li>
 )
 
-export default AreaComponent
+export default observer(AreaComponent)

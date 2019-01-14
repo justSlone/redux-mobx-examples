@@ -1,19 +1,24 @@
 import faker from "faker";
+import { number } from "prop-types";
+import {ObservableMap} from 'mobx';
 faker.seed(111);
 
-export interface TreeState extends GraphNode {
+export interface TreeState {
   areas: Map<number, Area>;
   stories: Map<number, Story>;
   measures: Map<number, Measure>;
+  root: GraphNode
 }
 
+export const ROOT_ID: number = -1;
+
 export interface Collapseable {
-  collapsed: boolean;
+  collapsed: ObservableMap<number, boolean>
 }
 
 export interface GraphNode {
-  id: number,
-  parentIds: number[],
+  id: number
+  parentIds: number[]
   childIds: number[]
 }
 
@@ -35,9 +40,7 @@ export interface Target {
   date: Date;
 }
 
-let areas = new Map<number, Area>();
-let stories = new Map<number, Story>();
-let measures = new Map<number, Measure>();
+
 
 const makeId = () => {
   return faker.random.number({ min: 0, max: 100000 });
@@ -53,7 +56,7 @@ function addEmptyGraphNode<T>(node: T): T & GraphNode {
 }
 
 function addCollaspable<T>(node: T): T & Collapseable {
-  return { ...node, collapsed: faker.random.boolean() }
+  return { ...node, collapsed: new ObservableMap<number, boolean>() }
 }
 
 export const makeEmptyArea = (): Area => (
@@ -126,12 +129,17 @@ const makeTarget = (): Target => ({
 //   areaIds: [makeArea(), makeArea()]
 // };
 
+let areas = new Map<number, Area>();
+let stories = new Map<number, Story>();
+let measures = new Map<number, Measure>();
 export const initialState: TreeState = {
   areas: areas,
   stories: stories,
   measures: measures,
-  parentIds: [],
-  childIds: [],
-  id: -1
+  root: {  
+    parentIds: [],
+    childIds: [],
+    id: ROOT_ID
+  }
 };
 
