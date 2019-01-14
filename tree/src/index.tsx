@@ -5,9 +5,10 @@ import App from './components/App'
 import { configure } from 'mobx';
 import {store} from './stores';
 configure({enforceActions: "always"});
+import { TreeStore} from './stores/TreeStoreClass';
 
 render(
-  <Provider store={store} >
+  <Provider store={new TreeStore("store")} >
     <App />    
   </Provider>,
   document.getElementById('root')

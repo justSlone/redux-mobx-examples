@@ -1,8 +1,8 @@
 import React from 'react'
 import StoryComponent from './StoryComponent'
 import { Story, makeEmptyMeasure, Measure } from '../stores/TreeStoreSchema'
-import { observer } from 'mobx-react';
-import { store } from '../stores';
+import { observer, inject } from 'mobx-react';
+// import { store } from '../stores';
 import { observable, IObservableValue, runInAction} from 'mobx';
 
 export interface StoryList {
@@ -12,9 +12,9 @@ export interface StoryList {
 
 // ()=>(store.actions.collapseStory(story.id))
 // ()=>(story.collapsed = !story.collapsed)
-const StoryList: React.SFC<StoryList> = ({ storyIds, areaId }) => (
+const StoryList: React.SFC<StoryList> = inject("store")(observer(({ store, storyIds, areaId }) => (
   <ul>
-    {store.selectors.getStories(storyIds).map(story => {      
+    {store.selectors.getStories(storyIds).map((story: Story) => {      
       return (            
         <StoryComponent key={story.id} {...story}               
         //onAddClick={()=>{store.actions.addMeasure(story.id, makeEmptyMeasure())}}    
@@ -27,7 +27,7 @@ const StoryList: React.SFC<StoryList> = ({ storyIds, areaId }) => (
       })
   }
   </ul>
-)
+)))
 
 // Not very happy about having to observe here, but it's because we don't derefernce the array
-export default observer(StoryList)
+export default StoryList

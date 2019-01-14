@@ -14,6 +14,7 @@ import { realizeMixedStore, createStoreFromTemplate } from "./StoreHelper";
 import { toJS, ObservableMap } from "mobx";
 import { action } from "satcheljs";
 import { first, get } from "lodash";
+import { TreeStore} from './TreeStoreClass';
 
 const initialState: TreeState = {
   areas: new ObservableMap<number, Area>(),
@@ -33,9 +34,12 @@ const initialState: TreeState = {
 // let selectors = storeClass.selectors;
 TreeStoreTemplate.initialState = initialState;
 
-let {
-  store: { getState, actions, selectors }
-} = createStoreFromTemplate("name", TreeStoreTemplate);
+// let {
+//   store: { getState, actions, selectors }
+// } = createStoreFromTemplate("name", TreeStoreTemplate);
+
+let { getState, actions, selectors} = new TreeStore("treeStore");
+
 
 describe("todo store", () => {
   let testAreaId = 123;
@@ -220,7 +224,7 @@ describe("todo store", () => {
     let {
       store: { getState, actions, selectors }
     } = createStoreFromTemplate("removeArea", TreeStoreTemplate);
-    
+
     let area1 = makeEmptyArea();
     let area2 = makeEmptyArea();
     let story1 = makeEmptyStory();
