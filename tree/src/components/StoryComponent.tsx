@@ -1,6 +1,6 @@
 import React from 'react'
 import {Measure, makeEmptyMeasure} from '../stores/TreeStoreSchema';
-import MeasureList from './MeasureList';
+import MeasureListContainer from '../containers/MeasureListContainer';
 import{observer} from 'mobx-react';
 import { observable, action, IObservableValue } from 'mobx';
 
@@ -62,7 +62,7 @@ class StoryComponent extends React.Component<StoryProps> {
       <button onClick={e=>{e.stopPropagation(); addMeasure(M1)}}>M1</button>&nbsp;
       <button onClick={e=>{e.stopPropagation(); addMeasure(M2)}}>M2</button>&nbsp;
       <button onClick={e=>{e.stopPropagation(); addMeasure(M3)}}>M3</button>&nbsp;
-      {!isCollapsed && <MeasureList measureIds={measureIds} storyId={id}/>}
+      {!isCollapsed && <MeasureListContainer measureIds={measureIds} storyId={id}/>}
     </li>)
   }   
 }

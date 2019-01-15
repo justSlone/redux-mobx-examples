@@ -4,11 +4,11 @@ import { getRootStore, createStore } from 'satcheljs';
 import { DeepReadonly } from 'ts-essentials';
 import { type } from 'os';
 
-export function connect<T>(mapSelectorsToProps: (selectors: any, ownProps: T) => any, mapActionsToProps: (actions: any, ownProps: T) => any) {
+export function connect<T>(mapSelectorsToProps: (getState: ()=> any, selectors: any, ownProps: T) => any, mapActionsToProps: (actions: any, ownProps: T) => any) {
   return function connector(Component: any) {
     return inject("store")(
       observer(({ store, ...props }) => (
-        <Component {...mapSelectorsToProps(store.selectors, props)} {...mapActionsToProps(store.actions, props)} {...props} />
+        <Component {...mapSelectorsToProps(store.getState, store.selectors, props)} {...mapActionsToProps(store.actions, props)} {...props} />
       )));
   }
 }

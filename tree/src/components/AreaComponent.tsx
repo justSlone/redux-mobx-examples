@@ -1,6 +1,6 @@
 import React from 'react'
 import {Story, Area, makeEmptyStory} from '../stores/TreeStoreSchema';
-import StoryList from './StoryList';
+import StoryListContainer from '../containers/StoryListContainer';
 import {observer} from 'mobx-react';
 
 export interface AreaProps extends Area {
@@ -21,13 +21,13 @@ const AreaComponent: React.SFC<AreaProps> = ({ id, name, childIds: storyIds, isC
       listStyleType: isCollapsed ? 'disc':'circle'
     }}
   >
-    {`${id} : ${name} : ${0}`}
+    {`${id} : ${name} : ${storyIds.length}`}
     <button onClick={e=>{e.stopPropagation(); addStory(makeEmptyStory())}}>+</button>    
     <button onClick={e=>{e.stopPropagation(); onRemoveClick()}}>-</button>   
     <button onClick={e=>{e.stopPropagation(); addStory(S1)}}>S1</button>&nbsp;
     <button onClick={e=>{e.stopPropagation(); addStory(S2)}}>S2</button>&nbsp;
     <button onClick={e=>{e.stopPropagation(); addStory(S3)}}>S3</button>&nbsp;
-    {!isCollapsed && <StoryList storyIds={storyIds} areaId={id}/>}
+    {!isCollapsed && <StoryListContainer storyIds={storyIds} areaId={id}/>}
   </li>
 )
 

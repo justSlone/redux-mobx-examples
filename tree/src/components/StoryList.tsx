@@ -5,29 +5,34 @@ import { observer, inject } from 'mobx-react';
 // import { store } from '../stores';
 import { observable, IObservableValue, runInAction} from 'mobx';
 
-export interface StoryList {
-  storyIds: number[]
+export interface StoryListProps {
   areaId: number
+  stories: Story[]
+  addMeasure: (sid: number, m: Measure)=>void
+  removeStory: (aid: number, sid: number)=>void
+  collapseStory: (aid: number, sid: number)=>void
 }
 
 // ()=>(store.actions.collapseStory(story.id))
 // ()=>(story.collapsed = !story.collapsed)
-const StoryList: React.SFC<StoryList> = inject("store")(observer(({ store, storyIds, areaId }) => (
+const StoryList: React.FunctionComponent<StoryListProps> = ({ areaId, stories, addMeasure, removeStory, collapseStory }) => (
   <ul>
-    {store.selectors.getStories(storyIds).map((story: Story) => {      
+    {stories.map((story: Story) => {      
       return (            
         <StoryComponent key={story.id} {...story}               
         //onAddClick={()=>{store.actions.addMeasure(story.id, makeEmptyMeasure())}}    
-        addMeasure={(m: Measure)=>{store.actions.addMeasure(story.id, m)}}    
-        onRemoveClick={()=>store.actions.removeStory(areaId, story.id)}
-        onClick={()=>{store.actions.collapseStory(areaId, story.id)}}
+        addMeasure={(m: Measure)=>{addMeasure(story.id, m)}}    
+        onRemoveClick={()=>removeStory(areaId, story.id)}
+        onClick={()=>{collapseStory(areaId, story.id)}}
         isCollapsed={story.collapsed.get(areaId)!}
         />    
       )
       })
   }
   </ul>
-)))
+)
 
 // Not very happy about having to observe here, but it's because we don't derefernce the array
 export default StoryList
+
+

@@ -1,39 +1,38 @@
-import React from 'react'
+import React, {ReactNode}from 'react'
 import AreaComponent from './AreaComponent'
-import { Area, makeEmptyArea, Story, ROOT_ID} from '../stores/TreeStoreSchema'
+import { Area, makeEmptyArea, Story, ROOT_ID, TreeState} from '../stores/TreeStoreSchema'
 import { observer } from 'mobx-react'; 
-// import {store} from '../stores'
-import {DeepReadonly} from 'ts-essentials'
-import {inject} from 'mobx-react';
-import {TreeStore} from '../stores/TreeStoreClass';
 
-export interface AreaList {
-  areaIds: number[]
+export interface AreaListProps {
+  areas: Area[]
+  debugElement: JSX.Element
+  collapseArea: (id:number)=>void
+  addStory: (id:number, s:Story)=>void
+  removeArea: (id:number)=>void
+  addArea: ()=>void
 }
 
-const addArea = (store: TreeStore) =>{
-  store.actions.addArea(makeEmptyArea())
-}
-
-const AreaList: React.SFC<AreaList> = inject("store")(observer(({ store, areaIds }) => (
+const AreaList: React.SFC<AreaListProps> = ({ areas, debugElement, collapseArea, addStory, removeArea, addArea }) => (
   <div>
     {/* Only for debugging it makes this component listen to almost all changes */}
-    Areas: {store.getState().areas.size} Stories: {store.getState().stories.size} Measures: {store.getState().measures.size}
+    {/* Areas: {store.getState().areas.size} Stories: {store.getState().stories.size} Measures: {store.getState().measures.size} */}
+    {debugElement}
     <br/>      
-    <button onClick={e=>{e.stopPropagation();addArea(store);}}>Add Area</button>   
+    <button onClick={e=>{e.stopPropagation();addArea();}}>Add Area</button>   
     <ul>
-    {store.selectors.getAreas(areaIds).map((area: Area) =>      
+    {areas.map((area) =>      
       <AreaComponent key={area.id} {...area} 
       isCollapsed={area.collapsed.get(ROOT_ID)!}
-      onClick={()=>{store.actions.collapseArea(area.id)}}
-      addStory={(s: Story)=>{store.actions.addStory(area.id, s)}}
-      onRemoveClick={()=>store.actions.removeArea(area.id)}
+      onClick={()=>collapseArea(area.id)}
+      addStory={(s: Story)=>addStory(area.id, s)}
+      onRemoveClick={()=>removeArea(area.id)}
       />
     )}
   </ul>
   </div>
 
-)))
+)
 
 // Not very happy about having to observe here, but it's because we don't derefernce the array
-export default AreaList
+export default (AreaList)
+

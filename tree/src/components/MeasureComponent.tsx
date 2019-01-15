@@ -11,7 +11,6 @@ export interface MeasureProps {
 
 const MeasureComponent: React.SFC<MeasureProps> = ({ id, title, targets, onRemoveClick }) => (
   <li
-    // onClick={onClick}
     style={{
       textDecoration: false ? 'line-through' : 'none'
     }}
