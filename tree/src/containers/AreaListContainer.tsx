@@ -1,4 +1,4 @@
-import {TreeState, makeEmptyArea} from '../stores/TreeStoreSchema';
+import {TreeState, makeEmptyArea, Area, ROOT_ID} from '../stores/TreeStoreSchema';
 import AreaList, {AreaListProps} from '../components/AreaList';
 import {TreeStore} from '../stores/TreeStoreClass';
 import {connect} from '../stores/StoreHelper';
@@ -6,14 +6,15 @@ import {connect} from '../stores/StoreHelper';
 // import{ collapseArea } from './actions/TreeActions'
 
 
-const mapSelectorsToProps = (getState: ()=> TreeState, selectors: TreeStore["selectors"], ownProps: any) => {
+const mapSelectorsToProps = (getState: ()=> TreeState, selectors: TreeStore["selectors"], ownProps: any): Partial<AreaListProps> => {
     return {
       areas: selectors.getAreas(ownProps.areaIds),
+      isCollapsed: (area: Area)=>selectors.isCollapsed(ROOT_ID, area),
       // debugElement: <React.Fragment> Areas: {getState().areas.size} Stories: {getState().stories.size} Measures: {getState().measures.size}</React.Fragment>,
     }
   }
   
-  const mapActionsToProps = (actions: TreeStore["actions"], ownProps: AreaListProps) => {
+  const mapActionsToProps = (actions: TreeStore["actions"], ownProps: AreaListProps): Partial<AreaListProps> => {
     return {
       collapseArea: actions.collapseArea,
       addStory: actions.addStory, 

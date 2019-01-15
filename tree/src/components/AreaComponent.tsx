@@ -31,4 +31,4 @@ const AreaComponent: React.SFC<AreaProps> = ({ id, name, childIds: storyIds, isC
   </li>
 )
 
-export default observer(AreaComponent)
+export default (AreaComponent)

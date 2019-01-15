@@ -86,7 +86,8 @@ export class TreeStore {
     getAllAreas: () => Array.from(this.getState().areas.values()),
     getArea: (id: number) => this.getSingleSafe(id, this.getState().areas),
     getStory: (id: number) => this.getSingleSafe(id, this.getState().stories),
-    getMeasure: (id: number) => this.getSingleSafe(id, this.getState().measures)
+    getMeasure: (id: number) => this.getSingleSafe(id, this.getState().measures),
+    isCollapsed: (id: number, node: Collapseable): boolean => node.collapsed.get(id) || false
   };
 
   private pushIfNotExists<T>(arr: T[], item: T) {

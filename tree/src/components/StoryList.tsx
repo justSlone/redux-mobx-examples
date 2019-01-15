@@ -1,9 +1,7 @@
 import React from 'react'
 import StoryComponent from './StoryComponent'
-import { Story, makeEmptyMeasure, Measure } from '../stores/TreeStoreSchema'
-import { observer, inject } from 'mobx-react';
-// import { store } from '../stores';
-import { observable, IObservableValue, runInAction} from 'mobx';
+import { Story, Measure } from '../stores/TreeStoreSchema'
+import { observer } from 'mobx-react';
 
 export interface StoryListProps {
   areaId: number
@@ -11,20 +9,19 @@ export interface StoryListProps {
   addMeasure: (sid: number, m: Measure)=>void
   removeStory: (aid: number, sid: number)=>void
   collapseStory: (aid: number, sid: number)=>void
+  isCollapsed: (story: Story)=>boolean
 }
 
-// ()=>(store.actions.collapseStory(story.id))
-// ()=>(story.collapsed = !story.collapsed)
-const StoryList: React.FunctionComponent<StoryListProps> = ({ areaId, stories, addMeasure, removeStory, collapseStory }) => (
+const StoryList: React.FunctionComponent<StoryListProps> = ({ areaId, stories, addMeasure, removeStory, collapseStory, isCollapsed}) => (
   <ul>
     {stories.map((story: Story) => {      
       return (            
-        <StoryComponent key={story.id} {...story}               
-        //onAddClick={()=>{store.actions.addMeasure(story.id, makeEmptyMeasure())}}    
+        <StoryComponent key={story.id} {...story}
         addMeasure={(m: Measure)=>{addMeasure(story.id, m)}}    
         onRemoveClick={()=>removeStory(areaId, story.id)}
         onClick={()=>{collapseStory(areaId, story.id)}}
-        isCollapsed={story.collapsed.get(areaId)!}
+        isCollapsed={isCollapsed(story)}
+        measureCount={story.childIds.length} //  IDK if this is good
         />    
       )
       })
@@ -32,7 +29,6 @@ const StoryList: React.FunctionComponent<StoryListProps> = ({ areaId, stories, a
   </ul>
 )
 
-// Not very happy about having to observe here, but it's because we don't derefernce the array
-export default StoryList
+export default observer(StoryList)
 
 

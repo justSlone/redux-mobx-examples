@@ -82,6 +82,7 @@ const createSelectors = (store: () => TreeState) => {
   let getStory = (id: number) => getSingleSafe(id, store().stories);
   let getMeasure = (id: number) => getSingleSafe(id, store().measures);
   let getAllAreas = () => Array.from(store().areas.values());
+  let isCollapsed = (id: number, node: Collapseable): boolean => node.collapsed.get(id) || false
   let selectors = {
     getAreas,
     getStories,
@@ -89,7 +90,8 @@ const createSelectors = (store: () => TreeState) => {
     getAllAreas,
     getArea,
     getStory,
-    getMeasure
+    getMeasure, 
+    isCollapsed
   };
   return selectors;
 };

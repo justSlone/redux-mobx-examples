@@ -6,7 +6,6 @@ import {inject} from 'mobx-react';
 
 const App = inject("store")(({store}) => (
   <div>
-    Hello    
     <AreaListContainer areaIds={store.getState().root.childIds} />        
     <DevTools />
   </div>
