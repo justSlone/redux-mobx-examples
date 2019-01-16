@@ -13,7 +13,7 @@ export interface AreaListProps {
   isCollapsed: (area: Area)=>boolean
 }
 
-const AreaList: React.SFC<AreaListProps> = ({ areas, debugElement, collapseArea, addStory, removeArea, addArea, isCollapsed }) => (
+const AreaList: React.FunctionComponent<AreaListProps> = ({ areas, debugElement, collapseArea, addStory, removeArea, addArea, isCollapsed }) => (
   <div>
     {/* Only for debugging it makes this component listen to almost all changes */}
     {/* Areas: {store.getState().areas.size} Stories: {store.getState().stories.size} Measures: {store.getState().measures.size} */}

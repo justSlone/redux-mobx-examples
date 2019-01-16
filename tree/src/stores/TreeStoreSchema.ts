@@ -43,13 +43,8 @@ export interface Target {
 
 
 const makeId = () => {
-  return faker.random.number({ min: 0, max: 100000 });
+  return faker.random.number({ min: 0, max: 1000000 });
 };
-
-export interface Area extends Collapseable, GraphNode {
-  name: string;
-  id: number;
-}
 
 function addEmptyGraphNode<T>(node: T): T & GraphNode {
   return { ...node, parentIds: [], childIds: [], id: makeId() }

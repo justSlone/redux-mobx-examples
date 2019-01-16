@@ -19,7 +19,7 @@ const M2 = makeEmptyMeasure();
 const M3 = makeEmptyMeasure();
 
 
-const StoryComponent: React.SFC<StoryProps> = ({ id, title, childIds: measureIds, isCollapsed, onClick, addMeasure, onRemoveClick, measureCount}) => (
+const StoryComponent: React.FunctionComponent<StoryProps> = ({ id, title, childIds: measureIds, isCollapsed, onClick, addMeasure, onRemoveClick, measureCount}) => (
   <li    
     onClick={e=>{e.stopPropagation(); onClick()}}
     style={{

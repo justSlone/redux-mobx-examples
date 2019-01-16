@@ -14,7 +14,7 @@ const S1 = makeEmptyStory();
 const S2 = makeEmptyStory();
 const S3 = makeEmptyStory();
 
-const AreaComponent: React.SFC<AreaProps> = ({ id, name, childIds: storyIds, isCollapsed, onClick, addStory, onRemoveClick}) => (
+const AreaComponent: React.FunctionComponent<AreaProps> = ({ id, name, childIds: storyIds, isCollapsed, onClick, addStory, onRemoveClick}) => (
   <li
     onClick={e=>{e.stopPropagation(); onClick()}}
     style={{

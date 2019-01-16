@@ -10,7 +10,7 @@ export interface MeasureListProps {
   removeMeasure: (storyId: number, measureId: number)=>void
 }
 
-const MeasureList: React.SFC<MeasureListProps> = inject("store")(observer(({ store, measureIds, storyId}) => (
+const MeasureList: React.FunctionComponent<MeasureListProps> = inject("store")(observer(({ store, measureIds, storyId}) => (
   <ul>
     {store.selectors.getMeasures(measureIds).map( (measure: Measure) =>      
       <MeasureComponent key={measure.id} {...measure} onRemoveClick={()=>{store.actions.removeMeasure(storyId, measure.id)}}  />
