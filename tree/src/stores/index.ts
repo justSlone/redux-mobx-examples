@@ -1,8 +1,10 @@
+import {createContext} from 'react';
 import {createStoreFromTemplate, MixObj} from './StoreHelper';
 import {TreeStoreTemplate} from './TreeStore';
 import {toJS} from 'mobx';
 import * as faker from 'faker';
 import {makeEmptyArea, makeEmptyStory, makeEmptyMeasure} from './TreeStoreSchema';
+import { TreeStore } from './TreeStoreClass';
 
 // export const StoreTemplate = {
 //     initialState: MixObj(TreeStoreTemplate.initialState),
